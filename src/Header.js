@@ -22,17 +22,17 @@ class Header extends Component {
         <nav id="nav-wrap">
           <ul id="nav" className="nav">
             <li className="current">
-              <a className="smoothscroll" href="#home" onClick={() => this.smoothScroll("#home")}>
+              <a className="smoothscroll" id='menu' href="#home" onClick={() => this.smoothScroll("#home")}>
                 Home
               </a>
             </li>
             <li>
-              <a className="smoothscroll" href="#about" onClick={() => this.smoothScroll("#about")}>
+              <a className="smoothscroll" id='menu' href="#about" onClick={() => this.smoothScroll("#about")}>
                 About
               </a>
             </li>
             <li>
-              <a className="smoothscroll" href="#login" onClick={() => this.smoothScroll("#login")}>
+              <a className="smoothscroll" id='menu' href="#login" onClick={() => this.smoothScroll("#login")}>
                 Login/Sign Up
               </a>
             </li>

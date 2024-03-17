@@ -1,0 +1,55 @@
+body {
+    background-color: rgb(75, 0, 130);
+    margin: 0;
+    padding: 0;
+}
+
+.report-container {
+    margin: 20px auto; /* Centering the container */
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
+}
+
+.report-container h1 {
+    padding-top: 2px;
+    color: #ffffff;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100px;
+    text-align: center;
+}
+
+.report-section {
+    margin-top: 20px;
+}
+
+.report-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: #9d9d9d;
+    font-size: 45px;
+    text-align: center;
+}
+
+.report-section p {
+    font-family: 'Montserrat', sans-serif;
+    color: #9d9d9d;
+    font-size: 21px;
+    padding-left: 50px;
+    padding-top: 25px;
+}
+
+.graph-container {
+    display: flex;
+    justify-content: space-around; /* or justify-content: space-evenly; */
+    color: #ffffff;
+}
+
+
+.bar-graph {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
