@@ -10,6 +10,8 @@ import QuizPage from "./QuizPage";
 import CandidateScreen from "./CandidateScreen";
 import AudioInterview from "./AudioInterview";
 import VideoInterview from "./VideoInterview";
+import TextInterview from "./TextInterview";
+import Text from "./Text";
 
 function App() {
   return (
@@ -32,6 +34,15 @@ function App() {
             path="/candidate/video-interview"
             element={<VideoInterview />}
           />
+           <Route
+            path="/candidate/text-interview"
+            element={<TextInterview />}
+          />
+           <Route
+            path="/candidate/text-interview/text"
+            element={<Text />}
+          />
+
         </Routes>
       </BrowserRouter>
     </>
