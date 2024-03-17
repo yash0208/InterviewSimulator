@@ -11,6 +11,7 @@ import CandidateScreen from "./CandidateScreen";
 import AudioInterview from "./AudioInterview";
 import VideoInterview from "./VideoInterview";
 import TextInterview from "./TextInterview";
+import Text from "./Text";
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
            <Route
             path="/candidate/text-interview"
             element={<TextInterview />}
+          />
+           <Route
+            path="/candidate/text-interview/text"
+            element={<Text />}
           />
 
         </Routes>

@@ -24,32 +24,41 @@ const questions = [
   },
 ];
 
-function TextInterview() {
+function Text() {
+
+  const [answer, setAnswer] = useState(""); // State to store the typed paragraph
   const [question, setQuestion] = useState(questions[0]);
 
   const navigate = useNavigate();
 
-  const goBack = () => navigate("/candidate");
-  const addText = () => navigate("/candidate/text-interview/text");
+  const goBack = () => navigate("/candidate/text-interview");
+
+  const handleInputChange = (event) => {
+    setAnswer(event.target.value); // Update the answer state as the user types
+  };
 
   return (
     <>
       <GlobalStyle />
       <Components.ContainerWrapper>
-        <Components.Banner>Text Interview</Components.Banner>
+        <Components.Banner>Write Text</Components.Banner>
         <Components.BlockQuote>
           <Components.Paragraph class="quotation">
             {question.title}
           </Components.Paragraph>
         </Components.BlockQuote>
-        <Components.Button onClick={addText}>Start Typing</Components.Button>
-        <Components.Message>{question.message}</Components.Message>
-        <Components.Button>Get Emotion Analysis</Components.Button>
-        <Components.Anchor href="#">How does it work?</Components.Anchor>
+        <textarea
+          value={answer}
+          onChange={handleInputChange}
+          placeholder="Type your answer here..."
+          rows={10} 
+          cols={100} 
+        />
+        <Components.Button>Submit</Components.Button>
         <Components.BackButton onClick={goBack}>Back</Components.BackButton>
       </Components.ContainerWrapper>
     </>
   );
 }
 
-export default TextInterview;
+export default Text;
