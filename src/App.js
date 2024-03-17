@@ -12,13 +12,14 @@ import AudioInterview from "./AudioInterview";
 import VideoInterview from "./VideoInterview";
 import TextInterview from "./TextInterview";
 import Text from "./Text";
+import Header from "./Header";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Authentication />} />
+          <Route path="/auth" element={<Authentication />} />
           <Route path="interviewer" element={<InterviewerScreen />} />
           <Route path="candidate" element={<CandidateScreen />} />
           <Route path="interviewer/create_quiz" element={<QuizPage />} />
@@ -43,6 +44,10 @@ function App() {
             element={<Text />}
           />
 
+          <Route
+            path="/"
+            element={<Header />}
+          />
         </Routes>
       </BrowserRouter>
     </>
