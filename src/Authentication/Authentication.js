@@ -165,6 +165,9 @@ export function Authentication() {
                         if(snapshot.val().userType==="interviewer"){
                             navigate('interviewer');
                         }
+                        else {
+                            navigate('candidate');
+                        }
                     } else {
                         console.log("No data available");
                     }

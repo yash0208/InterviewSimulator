@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import  logo from "./logo.svg";
 import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 
@@ -12,14 +12,18 @@ import AudioInterview from "./AudioInterview";
 import VideoInterview from "./VideoInterview";
 import TextInterview from "./TextInterview";
 import Text from "./Text";
+import MockInterviewScreen from "./MockInterviewScreen";
 import Header from "./Header";
+import ThankYou from "./ThankYou";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/auth" element={<Authentication />} />
+          <Route path="/" element={<Header />} />
+          <Route path="auth" element={<Authentication/>}/>
+          <Route path="thank you" element={<ThankYou/>}   />
           <Route path="interviewer" element={<InterviewerScreen />} />
           <Route path="candidate" element={<CandidateScreen />} />
           <Route path="interviewer/create_quiz" element={<QuizPage />} />
@@ -30,6 +34,10 @@ function App() {
           <Route
             path="/candidate/audio-interview"
             element={<AudioInterview />}
+          />
+          <Route
+              path="/candidate/mock"
+              element={<MockInterviewScreen />}
           />
           <Route
             path="/candidate/video-interview"
@@ -44,10 +52,6 @@ function App() {
             element={<Text />}
           />
 
-          <Route
-            path="/"
-            element={<Header />}
-          />
         </Routes>
       </BrowserRouter>
     </>
