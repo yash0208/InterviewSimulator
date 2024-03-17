@@ -25,6 +25,7 @@ function App() {
           <Route path="auth" element={<Authentication/>}/>
           <Route path="thank you" element={<ThankYou/>}   />
           <Route path="interviewer" element={<InterviewerScreen />} />
+          <Route path="auth/interviewer" element={<InterviewerScreen />} />
           <Route path="candidate" element={<CandidateScreen />} />
 
           <Route path="auth/candidate" element={<CandidateScreen />} />
