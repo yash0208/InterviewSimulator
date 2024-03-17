@@ -1,7 +1,6 @@
 /* Add CSS styles for About component */
 
 #about {
-    background-color: #685aed; /* Navy blue background color */
     font-family: 'Montserrat', sans-serif; /* Montserrat font */
 }
   
@@ -13,7 +12,7 @@
 }
   
 .about-heading h1 {
-    color: white; /* White text color */
+    color: #000000; /* White text color */
     margin: 0; /* Remove default margin */
     font-family: 'Montserrat', sans-serif; /* Montserrat font */
     font-size: 54px;
@@ -38,7 +37,7 @@
 }
   
 .about-item p {
-    color: white; /* White text color */
+    color: #000000; /* White text color */
     font-family: 'Montserrat', sans-serif; /* Montserrat font */
     font-size: 18px;
 }
