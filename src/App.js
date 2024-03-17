@@ -12,7 +12,6 @@ import AudioInterview from "./AudioInterview";
 import VideoInterview from "./VideoInterview";
 import TextInterview from "./TextInterview";
 import Text from "./Text";
-import MockInterviewScreen from "./MockInterviewScreen";
 
 function App() {
   return (
@@ -31,8 +30,6 @@ function App() {
             path="/candidate/audio-interview"
             element={<AudioInterview />}
           />
-          <Route
-            path={'candidate/mock'} element={<MockInterviewScreen/>}/>
           <Route
             path="/candidate/video-interview"
             element={<VideoInterview />}
