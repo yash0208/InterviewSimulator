@@ -68,6 +68,16 @@ export default function InterviewerScreen(){
     const handleNavigate= (e)=>{
         navigate('create_quiz');
     }
+    const handleNavigateSignOut= (e)=>{
+        auth.signOut().then(function() {
+
+            navigate('/');
+            // Sign-out successful.
+        }).catch(function(error) {
+            // An error happened.
+        });
+    }
+
     const handleCardClick2 = (quiz) => {
         setSelectedQuiz(quiz);
         setShowAssignModal(true);
@@ -107,7 +117,7 @@ export default function InterviewerScreen(){
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto">
                             <Button className="custom-button" variant="outline-light" onClick={handleNavigate}>Create Interview</Button>
-                            <Button className="custom-button" variant="outline-light">Sign Out</Button>
+                            <Button className="custom-button" variant="outline-light" onClick={handleNavigateSignOut}>Sign Out</Button>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
