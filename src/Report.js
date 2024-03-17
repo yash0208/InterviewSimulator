@@ -36,32 +36,21 @@ const Report = () => {
                             width={1300}
                             height={700}
                             sx={{
-                                //change left yAxis label styles
-                               "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel":{
-                                strokeWidth:"0.4",
-                                fill:"#ffffff"
-                               },
-                               // change all labels fontFamily shown on both xAxis and yAxis
                                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
                                     fontFamily: "'Montserrat', sans-serif",
                                 },
-                                // change bottom label styles
-                                "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel":{
-                                    strokeWidth:"0.5",
-                                    fill:"#ffffff"
-                                 },
-                                  // bottomAxis Line Styles
-                                 "& .MuiChartsAxis-bottom .MuiChartsAxis-line":{
-                                  stroke:"#ffffff",
-                                  strokeWidth:0.4
-                                 },
-                                 // leftAxis Line Styles
-                                 "& .MuiChartsAxis-left .MuiChartsAxis-line":{
-                                  stroke:"#ffffff",
-                                  strokeWidth:0.4
-                                 }
                               }}
                         />
+                    </div>
+                </div>
+                <div className="legend">
+                    <div className="legend-item">
+                        <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                        <div className="legend-label">Your Personality</div>
+                    </div>
+                    <div className="legend-item">
+                        <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
+                        <div className="legend-label">General Average</div>
                     </div>
                 </div>
             </div>
@@ -122,41 +111,22 @@ const Report = () => {
                             ]}
                             width={1300}
                             height={700}
-                            legends={[
-                                {
-                                    data: [
-                                        { name: 'Representation A', color: '#2196f3' },
-                                        { name: 'Representation B', color: '#ff5722' },
-                                    ],
-                                },
-                            ]}
                             sx={{
-                                //change left yAxis label styles
-                               "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel":{
-                                strokeWidth:"0.4",
-                                fill:"#ffffff"
-                               },
-                               // change all labels fontFamily shown on both xAxis and yAxis
                                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
                                     fontFamily: "'Montserrat', sans-serif",
                                 },
-                                // change bottom label styles
-                                "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel":{
-                                    strokeWidth:"0.5",
-                                    fill:"#ffffff"
-                                 },
-                                  // bottomAxis Line Styles
-                                 "& .MuiChartsAxis-bottom .MuiChartsAxis-line":{
-                                  stroke:"#ffffff",
-                                  strokeWidth:0.4
-                                 },
-                                 // leftAxis Line Styles
-                                 "& .MuiChartsAxis-left .MuiChartsAxis-line":{
-                                  stroke:"#ffffff",
-                                  strokeWidth:0.4
-                                 }
                               }}
                         />
+                    </div>
+                </div>
+                <div className="legend">
+                    <div className="legend-item">
+                        <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                        <div className="legend-label">Your Emotions</div>
+                    </div>
+                    <div className="legend-item">
+                        <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
+                        <div className="legend-label">General Average</div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(75, 0, 130);
+    background-color: rgb(255, 255, 255);
     margin: 0;
     padding: 0;
 }
@@ -7,12 +7,12 @@ body {
 .report-container {
     margin: 20px auto; /* Centering the container */
     font-family: 'Montserrat', sans-serif;
-    color: #ffffff;
+    color: #000000;
 }
 
 .report-container h1 {
     padding-top: 2px;
-    color: #ffffff;
+    color: #434040;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     font-size: 100px;
@@ -32,7 +32,7 @@ body {
 
 .report-section p {
     font-family: 'Montserrat', sans-serif;
-    color: #9d9d9d;
+    color: #000000;
     font-size: 21px;
     padding-left: 50px;
     padding-top: 25px;
@@ -41,7 +41,7 @@ body {
 .graph-container {
     display: flex;
     justify-content: space-around; /* or justify-content: space-evenly; */
-    color: #ffffff;
+    color: #000000;
 }
 
 
@@ -52,4 +52,25 @@ body {
     align-items: center;
 }
 
+.legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.legend-label {
+    font-family: 'Montserrat', sans-serif;
+    color: #000000;
+}
