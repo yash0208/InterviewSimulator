@@ -1,10 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import ParticlesBg from "particles-bg";
 import './Header.css';
 import About from "./About";
+import { useNavigate } from "react-router-dom";
 
-class Header extends Component {
-  smoothScroll = (target) => {
+const Header = () => {
+  const navigate = useNavigate();
+
+  const smoothScroll = (target) => {
     const targetElement = document.querySelector(target);
     const targetOffset = targetElement.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
@@ -13,41 +16,43 @@ class Header extends Component {
     });
   };
 
-  render() {
-    return (
+  const handleLoginClick = () => {
+    navigate('auth');
+  };
+
+  return (
       <>
-      <header id="home">
-        <ParticlesBg type="circle" bg={true} />
+        <header id="home">
+          <ParticlesBg type="circle" bg={true} />
 
-        <nav id="nav-wrap">
-          <ul id="nav" className="nav">
-            <li className="current">
-              <a className="smoothscroll" id='menu' href="#home" onClick={() => this.smoothScroll("#home")}>
-                Home
-              </a>
-            </li>
-            <li>
-              <a className="smoothscroll" id='menu' href="#about" onClick={() => this.smoothScroll("#about")}>
-                About
-              </a>
-            </li>
-            <li>
-              <a className="smoothscroll" id='menu' href="#login" onClick={() => this.smoothScroll("#login")}>
-                Login/Sign Up
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <nav id="nav-wrap">
+            <ul id="nav" className="nav">
+              <li className="current">
+                <a className="smoothscroll" id='menu' href="#home" onClick={() => smoothScroll("#home")}>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a className="smoothscroll" id='menu' href="#about" onClick={() => smoothScroll("#about")}>
+                  About
+                </a>
+              </li>
+              <li>
+                <a className="smoothscroll" id='menu' href="#login" onClick={handleLoginClick}>
+                  Login/Sign Up
+                </a>
+              </li>
+            </ul>
+          </nav>
 
-        <div className="banner-text">
-          <h1>IntuitiHire</h1>
-        </div>
-        
-      </header>
-      <About/>
+          <div className="banner-text">
+            <h1>IntuitiHire</h1>
+          </div>
+
+        </header>
+        <About/>
       </>
-    );
-  }
+  );
 }
 
 export default Header;
