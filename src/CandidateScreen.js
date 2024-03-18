@@ -72,6 +72,9 @@ export default function InterviewerScreen(){
     const handleNavigate= (e)=>{
         navigate('mock');
     }
+    const handleNavigate2= (e)=>{
+        navigate('mockre');
+    }
     const handleNavigateSignOut= (e)=>{
         auth.signOut().then(function() {
 
@@ -84,7 +87,8 @@ export default function InterviewerScreen(){
 
     const handleCardClick2 = (quiz) => {
         setSelectedQuiz(quiz);
-        setShowAssignModal(true);
+        console.log(quiz.id);
+        navigate('interview',{state:{paramName:quiz.id}});
         setAssigningQuiz(quiz);
     };
 
@@ -121,6 +125,8 @@ export default function InterviewerScreen(){
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto">
                             <Button className="custom-button" variant="outline-light" onClick={handleNavigate}>Mock Interview</Button>
+                            <Button className="custom-button" variant="outline-light" onClick={handleNavigate2}>MockInterview</Button>
+
                             <Button className="custom-button" variant="outline-light" onClick={handleNavigateSignOut}>Sign Out</Button>
                         </Nav>
                     </Navbar.Collapse>

@@ -15,6 +15,8 @@ import Text from "./Text";
 import MockInterviewScreen from "./MockInterviewScreen";
 import Header from "./Header";
 import ThankYou from "./ThankYou";
+import InterviewScreen from "./InterviewScreen";
+import MockInterviewReport from "./MockInterviewReport";
 
 function App() {
   return (
@@ -24,12 +26,14 @@ function App() {
           <Route path="/" element={<Header />} />
           <Route path="auth" element={<Authentication/>}/>
           <Route path="thank you" element={<ThankYou/>}   />
-          <Route path="interviewer" element={<InterviewerScreen />} />
+          <Route path="interviewer" element={<InterviewerScreen />} />\
+          <Route path="auth/interviewer" element={<InterviewerScreen />} />
           <Route path="auth/interviewer" element={<InterviewerScreen />} />
           <Route path="candidate" element={<CandidateScreen />} />
-
           <Route path="auth/candidate" element={<CandidateScreen />} />
           <Route path="interviewer/create_quiz" element={<QuizPage />} />
+          <Route path="auth/candidate/mockre" element={<MockInterviewReport />} />
+
           <Route
             path="interviewer/create_quiz/interviewer"
             element={<InterviewerScreen />}
@@ -37,10 +41,15 @@ function App() {
           <Route
             path="/candidate/audio-interview"
             element={<AudioInterview />}
-          />
+            />
+            <Route
+                path="auth/candidate/mock"
+                element={<MockInterviewScreen />}
+            />
+
           <Route
-              path="auth/candidate/mock"
-              element={<MockInterviewScreen />}
+              path="auth/candidate/interview"
+              element={<InterviewScreen />}
           />
           <Route
             path="/candidate/video-interview"
@@ -54,7 +63,6 @@ function App() {
             path="/candidate/text-interview/text"
             element={<Text />}
           />
-
         </Routes>
       </BrowserRouter>
     </>

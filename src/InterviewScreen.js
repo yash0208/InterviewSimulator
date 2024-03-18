@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate , useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { child, get, getDatabase, ref } from "firebase/database";
 import * as Components from "./AudioComponents.js";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { set, push } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+
 import {
     getStorage,
     uploadBytesResumable,
@@ -51,7 +52,7 @@ const StyledTextInput = styled.textarea`
   resize: vertical; /* Allow vertical resizing */
 `;
 
-function VideoInterview() {
+function VideoInterview(props) {
     const [questionIndex, setQuestionIndex] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [question, setQuestion] = useState(null); // Set initial state to null
@@ -60,14 +61,18 @@ function VideoInterview() {
     const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
 
     const navigate = useNavigate();
-    const id=useLocation().state.paramName;
-    console.log(id);
-    useEffect(() => {
 
+    const {state}=useLocation();
+    const {paramName}=state;
+    console.log(paramName);
+    useEffect(() => {
+        // alert(
+        //     "This is a mock interview consisting 3 sections Video, audio, and text answers. At the end, you will be able to check the complete report for your answers."
+        // );
         const fetchData = async () => {
             const dbRef = ref(getDatabase());
             const snapshot = await get(
-                child(dbRef, "interviews/"+id+"/questions")
+                child(dbRef, "interviews/"+paramName+"/questions")
             );
             if (snapshot.exists()) {
                 const interviewsData = [];
@@ -83,6 +88,7 @@ function VideoInterview() {
         };
 
         fetchData();
+
     }, []);
 
     const startRecording = () => {
@@ -108,7 +114,7 @@ function VideoInterview() {
                     const user = auth.currentUser;
                     const db = getDatabase();
                     set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid + questionIndex),
+                        ref(db, "completed-interviews/"+paramName+"/" + user.uid +questionIndex),
                         {
                             creator: user.uid,
                             candidate: user.uid,
@@ -148,8 +154,8 @@ function VideoInterview() {
                     console.log("Predicted emotion:", response.data);
                     const user = auth.currentUser;
                     const db = getDatabase();
-                    set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid + questionIndex),
+                    push(
+                        ref(db, "completed-interviews/mockInterviews/" + user.uid + "mock"),
                         {
                             creator: user.uid,
                             candidate: user.uid,
