@@ -93,9 +93,9 @@ function VideoInterview() {
     }
 
     if (question.section === "text") {
-        // Call function to upload text response to Firebase Firestore
-        uploadTextToFirebase(answer); // Add this line to upload the text response
-      }
+      // Call function to upload text response to Firebase Firestore
+      uploadTextToFirebase(answer); // Add this line to upload the text response
+    }
   };
 
   const uploadAudioToFirebase = async (blob) => {
@@ -113,12 +113,19 @@ function VideoInterview() {
           console.log("Predicted emotion:", response.data);
           const user = auth.currentUser;
           const db = getDatabase();
-          push(
-            ref(db, "completed-interviews/mockInterviews/" + user.uid + "mock"),
+          set(
+            ref(
+              db,
+              "completed-interviews/mockInterviews/" +
+                user.uid +
+                "/" +
+                questionIndex
+            ),
             {
               creator: user.uid,
               candidate: user.uid,
               questionId: questionIndex,
+              section: questions[questionIndex].section,
               question: questions[questionIndex],
               response: response.data,
               link: downloadURL,
@@ -142,36 +149,49 @@ function VideoInterview() {
   const uploadTextToFirebase = async (textResponse) => {
     try {
       // Make a POST request for text analysis
-      const response = await axios.post("http://127.0.0.1:8080/personality_detection", {
-        text: textResponse
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8080/personality_detection",
+        {
+          text: textResponse,
+        }
+      );
 
       console.log("Text analysis response:", response.data);
-  
+
       // Check if response data contains emotion
       if (response.data) {
         console.log("Text analysis response:", response.data);
-  
+
         // Upload text response and analysis to Firebase Firestore
         const user = auth.currentUser;
         const db = getDatabase();
-        push(ref(db, `completed-interviews/mockInterviews/${user.uid}mock`), {
-          creator: user.uid,
-          candidate: user.uid,
-          questionId: questionIndex,
-          question: questions[questionIndex],
-          response: {
-            text: textResponse,
-            analysis: response.data // Assuming response.data contains analysis results
+        set(
+          ref(
+            db,
+            "completed-interviews/mockInterviews/" +
+              user.uid +
+              "/" +
+              questionIndex
+          ),
+          {
+            creator: user.uid,
+            candidate: user.uid,
+            questionId: questionIndex,
+            section: questions[questionIndex].section,
+            question: questions[questionIndex],
+            response: {
+              text: textResponse,
+              analysis: response.data, // Assuming response.data contains analysis results
+            },
           }
-        });
-  
+        );
+
         // Proceed to the next question or perform other actions
-        setQuestionIndex(prevIndex => prevIndex + 1);
+        setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
         } else {
-          alert('All questions answered. Submitting recording...');
+          alert("All questions answered. Submitting recording...");
         }
       } else {
         console.error("No result received from text analysis");
@@ -180,7 +200,7 @@ function VideoInterview() {
       console.error("Error during text analysis:", error);
     }
   };
-  
+
   const addAudioElement = (blob) => {
     // Upload audio to Firebase Storage
     uploadAudioToFirebase(blob);
@@ -199,12 +219,19 @@ function VideoInterview() {
           console.log("Predicted emotion:", response.data);
           const user = auth.currentUser;
           const db = getDatabase();
-          push(
-            ref(db, "completed-interviews/mockInterviews/" + user.uid + "mock"),
+          set(
+            ref(
+              db,
+              "completed-interviews/mockInterviews/" +
+                user.uid +
+                "/" +
+                questionIndex
+            ),
             {
               creator: user.uid,
               candidate: user.uid,
               questionId: questionIndex,
+              section: questions[questionIndex].section,
               question: questions[questionIndex],
               response: response.data,
             }
@@ -217,7 +244,6 @@ function VideoInterview() {
         console.error("Error stopping recording:", error);
       });
     setApiLink("http://127.0.0.1:8080/video_feed");
-
     setQuestionIndex((prevIndex) => prevIndex + 1);
     if (questionIndex < questions.length - 1) {
       setQuestion(questions[questionIndex + 1]);
@@ -277,8 +303,7 @@ function VideoInterview() {
 
         {question.section === "video" && isRecording && (
           <img
-            key={apiLink}
-            src={apiLink}
+            src="http://127.0.0.1:8080/video_feed"
             alt="Video"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
