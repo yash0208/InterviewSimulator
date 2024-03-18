@@ -108,7 +108,7 @@ function VideoInterview() {
                     const user = auth.currentUser;
                     const db = getDatabase();
                     set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid + questionIndex),
+                        ref(db, "completed-interviews/"+id+"/" + user.uid+"/" + questionIndex),
                         {
                             creator: user.uid,
                             candidate: user.uid,
@@ -149,7 +149,7 @@ function VideoInterview() {
                     const user = auth.currentUser;
                     const db = getDatabase();
                     set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid + questionIndex),
+                        ref(db, "completed-interviews/"+id+"/" + user.uid +"/"+ questionIndex),
                         {
                             creator: user.uid,
                             candidate: user.uid,
