@@ -125,7 +125,7 @@ export default function InterviewerScreen(){
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto">
                             <Button className="custom-button" variant="outline-light" onClick={handleNavigate}>Mock Interview</Button>
-                            <Button className="custom-button" variant="outline-light" onClick={handleNavigate2}>MockInterview</Button>
+                            <Button className="custom-button" variant="outline-light" onClick={handleNavigate2}>Mock Analysis</Button>
 
                             <Button className="custom-button" variant="outline-light" onClick={handleNavigateSignOut}>Sign Out</Button>
                         </Nav>

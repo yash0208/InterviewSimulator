@@ -48,6 +48,11 @@ const Report = () => {
     let [ag,setAg]=useState(0);
     let [ex,setEx]=useState(0);
     let [nr,setNr]=useState(0);
+    let [aop,setaOp]=useState(0);
+    let [aco,setaCo]=useState(0);
+    let [aag,setaAg]=useState(0);
+    let [aex,setaEx]=useState(0);
+    let [anr,setaNr]=useState(0);
     let [hp,setHp]=useState(0);
     let [sa,setSa]=useState(0);
     let [su,setSu]=useState(0);
@@ -63,7 +68,7 @@ const Report = () => {
         const dbRef = ref(getDatabase());
         const user=auth.currentUser;
         const snapshot = await get(
-            child(dbRef, "completed-interviews/mockInterviews/l9qUAiser0Z0ixl4ol7Uwh7oiGF3")
+            child(dbRef, "completed-interviews/mockInterviews/YKS8e1pRUnNbJs8UaDtn0ht4Kd03")
         );
         if (snapshot.exists()) {
             const interviewsData = [];
@@ -94,6 +99,20 @@ const Report = () => {
                 setAg((ag+text[i].response.analysis.Agreeableness)/(i+1));
                 setNr((nr+text[i].response.analysis.Neuroticism)/(i+1));
             }
+            if(audio.length>0){
+                console.log(audio[0])
+            }
+            for(let i=0;i<audio.length;i++){
+                setaOp((aop+audio[i].response.personality_traits.Openness)/(i+1));
+                setaCo((aco+audio[i].response.
+                    personality_traits.Conscientiousness)/(i+1));
+                setaEx((aex+audio[i].response.
+                    personality_traits.Extroversion)/(i+1));
+                setaAg((aag+audio[i].response.
+                    personality_traits.Agreeableness)/(i+1));
+                setaNr((anr+audio[i].response.
+                    personality_traits.Neuroticism)/(i+1));
+            }
             for(let i=0;i<video.length;i++){
                 setHp((hp+video[i].response.emotion_percentages.Happy)/(i+1));
                 setAn((an+video[i].response.emotion_percentages.Angry)/(i+1));
@@ -105,7 +124,6 @@ const Report = () => {
                 setCe((ce+video[i].response.total_time_looking_center)/(i+1));
                 setLe((le+video[i].response.total_time_looking_left)/(i+1));
                 setRi((ri+video[i].response.total_time_looking_right)/(i+1));
-
             }
             if(op>0||co>0||ex>0||ag>0||nr>0){
                 setLoading(false);
@@ -126,10 +144,7 @@ const Report = () => {
 
         return (!loading && <div className="report-container">
             <h1>Report Page</h1><br /><br />
-            <div className="report-section">
-                <h2>Audio Analysis</h2>
-                <p>How Happy are you wit Potter, Ginny?</p>
-            </div>
+            
             <div className="report-section">
                 <h2>Text Analysis</h2>
                 {/* Insert the rotated bar charts here */}
@@ -172,7 +187,52 @@ const Report = () => {
                     </div>
                 </div>
             </div>
-            <div className="report-section">
+                <div className="report-section">
+                    <h2>Audio Analysis</h2>
+
+                    <p>The overall emotion analysis of the audio interview : {audio[audio.length-1].response.result[0]} </p>
+                    {/* Insert the rotated bar charts here */}
+                    <div className="graph-container">
+                        <div className="bar-graph rotated">
+                            <BarChart
+                                xAxis={[
+                                    {
+                                        id: 'barCategories',
+                                        data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
+                                        scaleType: 'band',
+                                    },
+                                ]}
+                                series={[
+                                    {
+                                        data: [2, 5, 3, 7, 1],
+                                    },
+                                    {
+                                        data: [aop*100, aco*100, aex*100, aag*100, anr*100],
+                                    }
+                                ]}
+                                width={1300}
+                                height={700}
+                                sx={{
+                                    "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
+                                        fontFamily: "'Montserrat', sans-serif",
+                                    },
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                            <div className="legend-label">Your Personality</div>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
+                            <div className="legend-label">General Average</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="report-section">
                 <h2>Video Analysis: Gaze</h2><br></br><br></br><br></br>
                 <div className="graph-container">
                     <div className="pie-chart">

@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate , useLocation} from "react-router-dom";
-import { child, get, getDatabase, ref } from "firebase/database";
-import * as Components from "./AudioComponents.js";
-import axios from "axios";
-import { set, push } from "firebase/database";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import {
-    getStorage,
-    uploadBytesResumable,
-    getDownloadURL,
-} from "firebase/storage";
-import { AudioRecorder } from "react-audio-voice-recorder";
-import { ref as sRef } from "firebase/storage";
-
+import {Button, Card, Container, Nav, Navbar, Modal, Form} from 'react-bootstrap';
+import logo from './assets/logo.png'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './NavigationBar.css';
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
+import {getAuth} from "firebase/auth";
+import {useEffect, useState} from "react";
+import {child, get, getDatabase, push, ref, set} from "firebase/database";
+import {useNavigate} from "react-router-dom"; // Import custom CSS file
+import './interviewer_css.css'
 const firebaseConfig = {
     apiKey: "AIzaSyAIVEam2B1Ws23SW43S3ebkc5lA7aGoVzo",
     authDomain: "interviewsimulator-252d6.firebaseapp.com",
@@ -23,228 +16,190 @@ const firebaseConfig = {
     storageBucket: "interviewsimulator-252d6.appspot.com",
     messagingSenderId: "106778466397",
     appId: "1:106778466397:web:1340f64fdf73be004095b4",
-    measurementId: "G-92QYXMMFTH",
+    measurementId: "G-92QYXMMFTH"
 };
 const app = initializeApp(firebaseConfig);
 
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const storage = getStorage(app);
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-`;
-
-const StyledTextInput = styled.textarea`
-  width: 70%;
-  height: 200px; /* Adjust height to fit 10 lines */
-  padding: 10px;
-  border: none;
-  background-color: #f3f3f3;
-  border-radius: 5px;
-  box-shadow: 7px 4px 37px -15px rgba(0, 0, 0, 0.89);
-  outline: none;
-  resize: vertical; /* Allow vertical resizing */
-`;
-
-function VideoInterview() {
-    const [questionIndex, setQuestionIndex] = useState(0);
-    const [questions, setQuestions] = useState([]);
-    const [question, setQuestion] = useState(null); // Set initial state to null
-    const [answer, setAnswer] = useState("");
-    const [isRecording, setIsRecording] = useState(false);
-    const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
-
-    const navigate = useNavigate();
-    const id=useLocation().state.paramName;
-    console.log(id);
+export default function InterviewerScreen(){
+    const navigate=useNavigate();
+    const [name,setName]=useState('');
+    const [interviews, setInterviews] = useState([]);
+    const [selectedQuiz, setSelectedQuiz] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [email, setEmail] = useState('');
+    const [showAssignModal, setShowAssignModal] = useState(false);
+    const [assigningQuiz, setAssigningQuiz] = useState(null);
+    const [selectedinterviews, selectedsetInterviews] = useState([]);
+    const [selectedselectedQuiz, selectedsetSelectedQuiz] = useState(null);
+    const [filtered,setFilteredInterviews]=useState([]);
     useEffect(() => {
-
         const fetchData = async () => {
             const dbRef = ref(getDatabase());
-            const snapshot = await get(
-                child(dbRef, "interviews/"+id+"/questions")
-            );
+            const snapshot = await get(child(dbRef, 'interviews'));
             if (snapshot.exists()) {
                 const interviewsData = [];
                 snapshot.forEach((childSnapshot) => {
-                    interviewsData.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val(),
-                    });
+                    const intv=childSnapshot.val();
+                    if(intv.creator===user.uid){
+
+                        interviewsData.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                    }
                 });
-                setQuestions(interviewsData);
-                setQuestion(interviewsData[0]); // Set the initial question after fetching data
+                setInterviews(interviewsData);
+            }
+            const snapshot2 = await get(child(dbRef, 'completed-interviews'));
+            if (snapshot2.exists()) {
+                const interviewsData2 = [];
+
+                snapshot2.forEach((childSnapshot) => {
+                    const intv=childSnapshot.val();
+                    const key=childSnapshot.key;
+
+                    console.log(key);
+                    for (let i=0;i<interviews.length;i++){
+                        if(interviews[i].creator===user.uid && interviews[i].key===key){
+                            interviewsData2.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                        }
+                    }
+                });
+                selectedsetInterviews(interviewsData2);
+                console.log(selectedinterviews.length);
             }
         };
 
         fetchData();
+        const user=auth.currentUser;
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                console.log(snapshot.val().companyName)
+                setName(snapshot.val().username);
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
     }, []);
 
-    const startRecording = () => {
-        if (question.section === "video") {
-            setIsRecording(true);
-        } else if (question.section === "audio") {
-        }
+    useEffect(() => {
+        const filtered = selectedinterviews.filter(interview => interview.creator === auth.currentUser.uid);
+        setFilteredInterviews(filtered);
+        console.log(filtered.length);
+    }, [interviews, auth.currentUser.uid]);
+    const handleCardClick = (quiz) => {
+        setSelectedQuiz(quiz);
+        setShowModal(true);
     };
+    const handleNavigate= (e)=>{
+        navigate('create_quiz');
+    }
+    const handleNavigateSignOut= (e)=>{
+        auth.signOut().then(function() {
 
-    const uploadAudioToFirebase = async (blob) => {
-        const storageRef = sRef(storage, `audio/${Date.now()}.wav`);
-        const uploadTask = await uploadBytesResumable(storageRef, blob);
-
-        // Get download URL
-        const downloadURL = await getDownloadURL(storageRef);
-
-        axios
-            .post("http://127.0.0.1:8080/audio_analysis", { link: downloadURL })
-            .then((response) => {
-                // Check if response data contains emotion
-                if (response.data) {
-                    console.log("Predicted emotion:", response.data);
-                    const user = auth.currentUser;
-                    const db = getDatabase();
-                    set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid+"/" + questionIndex),
-                        {
-                            creator: user.uid,
-                            candidate: user.uid,
-                            questionId: questionIndex,
-                            question: questions[questionIndex],
-                            response: response.data,
-                            link: downloadURL,
-                        }
-                    );
-                } else {
-                    console.error("No result received");
-                }
-                setQuestionIndex((prevIndex) => prevIndex + 1);
-                if (questionIndex < questions.length - 1) {
-                    setQuestion(questions[questionIndex + 1]);
-                } else {
-                    alert("All questions answered. Submitting recording...");
-                }
-            })
-            .catch((error) => {
-                console.error("Error stopping recording:", error);
-            });
-    };
-
-    const addAudioElement = (blob) => {
-        // Upload audio to Firebase Storage
-        uploadAudioToFirebase(blob);
-    };
-
-    const submitRecording = () => {
-        setIsRecording(false);
-        axios
-            .get("http://127.0.0.1:8080/close_camera")
-            .then((response) => {
-                // Check if response data contains emotion
-                if (response.data) {
-                    console.log("Predicted emotion:", response.data);
-                    const user = auth.currentUser;
-                    const db = getDatabase();
-                    set(
-                        ref(db, "completed-interviews/"+id+"/" + user.uid +"/"+ questionIndex),
-                        {
-                            creator: user.uid,
-                            candidate: user.uid,
-                            questionId: questionIndex,
-                            question: questions[questionIndex],
-                            response: response.data,
-                        }
-                    );
-                } else {
-                    console.error("No emotion data received");
-                }
-            })
-            .catch((error) => {
-                console.error("Error stopping recording:", error);
-            });
-        setApiLink("http://127.0.0.1:8080/video_feed");
-
-        setQuestionIndex((prevIndex) => prevIndex + 1);
-        if (questionIndex < questions.length - 1) {
-            setQuestion(questions[questionIndex + 1]);
-        } else {
-            alert("All questions answered. Submitting recording...");
-        }
-    };
-
-    if (!question) {
-        return null; // Render nothing until questions are fetched
+            navigate('/');
+            // Sign-out successful.
+        }).catch(function(error) {
+            // An error happened.
+        });
     }
 
-    let bannerText = "";
-    let buttonText = "";
-    if (question.section === "video") {
-        bannerText = "Video Question";
-        buttonText = "Start Recording";
-    } else if (question.section === "audio") {
-        bannerText = "Audio Question";
-        buttonText = "Start Recording (1min)";
-    } else if (question.section === "text") {
-        bannerText = "Text Question";
-        buttonText = "Start Typing";
-    }
+    const handleCardClick2 = (quiz) => {
+        setSelectedQuiz(quiz);
+        setShowAssignModal(true);
+        setAssigningQuiz(quiz);
+    };
 
-    return (
+    const handleAssign = (quizId) => {
+        // Logic to assign the quiz
+        console.log(`Quiz with ID ${selectedQuiz.id} assigned`);
+        const dbRef = ref(getDatabase());
+        const db = getDatabase();
+        push(ref(db, 'assignedQuizzes/'), {
+            email: email,
+            creator: auth.currentUser.uid,
+            quiz: selectedQuiz,
+            quizId: selectedQuiz.id,
+        });
+        alert(`Quiz assigned to :${email}`);
+        setShowModal(false);
+        setEmail('');
+    };
+    return(
         <>
-            <GlobalStyle />
-            <Components.ContainerWrapper>
-                <Components.Banner>{bannerText}</Components.Banner>
-                <Components.BlockQuote>
-                    <Components.Paragraph class="quotation">
-                        {question.question}
-                    </Components.Paragraph>
-                </Components.BlockQuote>
-                {question.section === "text" && (
-                    <StyledTextInput
-                        value={answer}
-                        onChange={(e) => setAnswer(e.target.value)}
-                        placeholder="Type your answer here..."
-                    />
-                )}
-
-                {question.section === "audio" && (
-                    <div>
-                        <AudioRecorder
-                            onRecordingComplete={addAudioElement}
-                            audioTrackConstraints={{
-                                noiseSuppression: true,
-                                echoCancellation: true,
-                            }}
-                            downloadOnSavePress={false}
-                            downloadFileExtension="wav"
+            <Navbar className="custom-navbar" bg="light" expand="lg">
+                <Container>
+                    <Navbar.Brand href="#home" className="brand-name">
+                        <img
+                            src={logo}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top"
+                            alt="Logo"
                         />
-                    </div>
-                )}
+                        {name}
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="ms-auto">
+                            <Button className="custom-button" variant="outline-light" onClick={handleNavigate}>Create Interview</Button>
+                            <Button className="custom-button" variant="outline-light" onClick={handleNavigateSignOut}>Sign Out</Button>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+            <Container className="mt-5" >
+                <h2>Created Interviews</h2>
+                <div className="d-flex flex-wrap">
+                    {interviews.map((interview) => (
+                        <Card key={interview.id} className="m-2" style={{ width: '18rem' }}>
+                            <Card.Body>
+                                <Card.Title>{interview.name}</Card.Title>
+                                <Button variant="primary" onClick={() => handleCardClick(interview)}>View Details</Button>
+                                <Button style={{marginLeft: '20px'}} variant="success" onClick={() => handleCardClick2(interview)} className="ml-2">Assign</Button>
 
-                {question.section === "video" && isRecording && (
-                    <img
-                        key={apiLink}
-                        src={apiLink}
-                        alt="Video"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                )}
-
-                <Components.Button onClick={startRecording}>
-                    {buttonText}
-                </Components.Button>
-                {isRecording && (
-                    <Components.Button onClick={submitRecording}>
-                        Stop Recording
-                    </Components.Button>
-                )}
-                {/* <Components.Message>{question.message}</Components.Message> */}
-            </Components.ContainerWrapper>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </div>
+            </Container>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{selectedQuiz?.name}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h5>Questions:</h5>
+                    <ul>
+                        {selectedQuiz?.questions.map((question, index) => (
+                            <li key={index}>{question.question} - {question.section}</li>
+                        ))}
+                    </ul>
+                </Modal.Body>
+            </Modal>
+            {/* Modal to enter email address */}
+            <Modal show={showAssignModal} onHide={() => setShowAssignModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Assign Quiz</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowAssignModal(false)}>Close</Button>
+                    <Button variant="primary" onClick={handleAssign}>Assign</Button>
+                </Modal.Footer>
+            </Modal>
         </>
-    );
-}
 
-export default VideoInterview;
+
+    )
+}

@@ -59,7 +59,7 @@ function VideoInterview(props) {
   const [answer, setAnswer] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
-
+  const [interviewer,setInterviewer]=useState('');
   const navigate = useNavigate();
 
   const { state } = useLocation();
@@ -84,6 +84,12 @@ function VideoInterview(props) {
         });
         setQuestions(interviewsData);
         setQuestion(interviewsData[0]); // Set the initial question after fetching data
+      }
+      const snapshot2 = await get(
+          child(dbRef, "interviews/" + paramName)
+      );
+      if (snapshot2.exists()) {
+        setInterviewer(snapshot2.creator);// Set the initial question after fetching data
       }
     };
 
@@ -130,6 +136,18 @@ function VideoInterview(props) {
               analysis: response.data, // Assuming response.data contains analysis results
             },
           }
+        );
+        set(
+            ref(
+                db,
+                "completed-interviews/" +
+                paramName +
+                "/" +
+                user.uid
+            ),
+            {
+              creator: interviewer,
+            }
         );
 
         // Proceed to the next question or perform other actions
@@ -192,6 +210,18 @@ function VideoInterview(props) {
               link: downloadURL,
             }
           );
+          set(
+              ref(
+                  db,
+                  "completed-interviews/" +
+                  paramName +
+                  "/" +
+                  user.uid
+              ),
+              {
+                creator: interviewer,
+              }
+          );
         } else {
           console.error("No result received");
         }
@@ -240,6 +270,18 @@ function VideoInterview(props) {
               question: questions[questionIndex],
               response: response.data,
             }
+          );
+          set(
+              ref(
+                  db,
+                  "completed-interviews/" +
+                  paramName +
+                  "/" +
+                  user.uid
+              ),
+              {
+                creator: interviewer,
+              }
           );
         } else {
           console.error("No emotion data received");
