@@ -208,8 +208,10 @@ function VideoInterview() {
 
   const submitRecording = () => {
     setIsRecording(false);
-
-    console.log("Answer:", answer);
+    setApiLink(
+      "https://plus.unsplash.com/premium_photo-1666900440561-94dcb6865554?q=80&w=3240&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    );
+    setApiLink("http://127.0.0.1:8080/video_feed");
 
     axios
       .get("http://127.0.0.1:8080/close_camera")
@@ -243,7 +245,6 @@ function VideoInterview() {
       .catch((error) => {
         console.error("Error stopping recording:", error);
       });
-    setApiLink("http://127.0.0.1:8080/video_feed");
     setQuestionIndex((prevIndex) => prevIndex + 1);
     if (questionIndex < questions.length - 1) {
       setQuestion(questions[questionIndex + 1]);
@@ -303,7 +304,7 @@ function VideoInterview() {
 
         {question.section === "video" && isRecording && (
           <img
-            src="http://127.0.0.1:8080/video_feed"
+            src={apiLink}
             alt="Video"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />

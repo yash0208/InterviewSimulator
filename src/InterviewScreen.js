@@ -59,7 +59,7 @@ function VideoInterview(props) {
   const [answer, setAnswer] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
-  const [interviewer,setInterviewer]=useState('');
+  const [interviewer, setInterviewer] = useState("");
   const navigate = useNavigate();
 
   const { state } = useLocation();
@@ -85,11 +85,10 @@ function VideoInterview(props) {
         setQuestions(interviewsData);
         setQuestion(interviewsData[0]); // Set the initial question after fetching data
       }
-      const snapshot2 = await get(
-          child(dbRef, "interviews/" + paramName)
-      );
+      const snapshot2 = await get(child(dbRef, "interviews/" + paramName));
       if (snapshot2.exists()) {
-        setInterviewer(snapshot2.creator);// Set the initial question after fetching data
+        console.log(snapshot2.val().creator);
+        setInterviewer(snapshot2.val().creator); // Set the initial question after fetching data
       }
     };
 
@@ -119,6 +118,9 @@ function VideoInterview(props) {
           ref(
             db,
             "completed-interviews/" +
+              "/" +
+              interviewer +
+              "/" +
               paramName +
               "/" +
               user.uid +
@@ -136,18 +138,6 @@ function VideoInterview(props) {
               analysis: response.data, // Assuming response.data contains analysis results
             },
           }
-        );
-        set(
-            ref(
-                db,
-                "completed-interviews/" +
-                paramName +
-                "/" +
-                user.uid
-            ),
-            {
-              creator: interviewer,
-            }
         );
 
         // Proceed to the next question or perform other actions
@@ -195,6 +185,9 @@ function VideoInterview(props) {
             ref(
               db,
               "completed-interviews/" +
+                "/" +
+                interviewer +
+                "/" +
                 paramName +
                 "/" +
                 user.uid +
@@ -209,18 +202,6 @@ function VideoInterview(props) {
               response: response.data,
               link: downloadURL,
             }
-          );
-          set(
-              ref(
-                  db,
-                  "completed-interviews/" +
-                  paramName +
-                  "/" +
-                  user.uid
-              ),
-              {
-                creator: interviewer,
-              }
           );
         } else {
           console.error("No result received");
@@ -244,6 +225,10 @@ function VideoInterview(props) {
 
   const submitRecording = () => {
     setIsRecording(false);
+    setApiLink(
+      "https://plus.unsplash.com/premium_photo-1666900440561-94dcb6865554?q=80&w=3240&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    );
+    setApiLink("http://127.0.0.1:8080/video_feed");
     axios
       .get("http://127.0.0.1:8080/close_camera")
       .then((response) => {
@@ -257,6 +242,9 @@ function VideoInterview(props) {
             ref(
               db,
               "completed-interviews/" +
+                "/" +
+                interviewer +
+                "/" +
                 paramName +
                 "/" +
                 user.uid +
@@ -270,18 +258,6 @@ function VideoInterview(props) {
               question: questions[questionIndex],
               response: response.data,
             }
-          );
-          set(
-              ref(
-                  db,
-                  "completed-interviews/" +
-                  paramName +
-                  "/" +
-                  user.uid
-              ),
-              {
-                creator: interviewer,
-              }
           );
         } else {
           console.error("No emotion data received");
@@ -351,7 +327,6 @@ function VideoInterview(props) {
 
         {question.section === "video" && isRecording && (
           <img
-            key={apiLink}
             src={apiLink}
             alt="Video"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
