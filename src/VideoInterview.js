@@ -67,6 +67,9 @@ function VideoInterview() {
               controls
               width="50%"
               height="50%"
+              muted="false"
+              autoPlay="true"
+              loop
             className="w-full h-full object-cover"
           >
             <source src={Loader} type="video/mp4" />
