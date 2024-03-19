@@ -17,6 +17,7 @@ import Header from "./Header";
 import ThankYou from "./ThankYou";
 import InterviewScreen from "./InterviewScreen";
 import MockInterviewReport from "./MockInterviewReport";
+import InterviewReport from "./InterviewReport";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
           <Route path="auth/candidate" element={<CandidateScreen />} />
           <Route path="interviewer/create_quiz" element={<QuizPage />} />
           <Route path="auth/candidate/mockre" element={<MockInterviewReport />} />
-
+          <Route path="auth/interviewer/interviewReport" element={<InterviewReport/>}/>
           <Route
             path="interviewer/create_quiz/interviewer"
             element={<InterviewerScreen />}

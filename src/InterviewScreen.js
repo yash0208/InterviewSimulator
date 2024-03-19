@@ -199,6 +199,7 @@ function VideoInterview(props) {
               candidate: user.uid,
               questionId: questionIndex,
               question: questions[questionIndex],
+              section: questions[questionIndex].section,
               response: response.data,
               link: downloadURL,
             }
@@ -256,6 +257,7 @@ function VideoInterview(props) {
               candidate: user.uid,
               questionId: questionIndex,
               question: questions[questionIndex],
+              section: questions[questionIndex].section,
               response: response.data,
             }
           );

@@ -35,6 +35,19 @@ export default function InterviewerScreen(){
     const [selectedinterviews, selectedsetInterviews] = useState([]);
     const [selectedselectedQuiz, selectedsetSelectedQuiz] = useState(null);
     const [filtered,setFilteredInterviews]=useState([]);
+    const [interviewDetails,setInterviewDetails]=useState();
+    const [names, setNames] = useState({});
+    const [InterviewIds, setInterviewIds] = useState({});
+
+    const getName = async (userId) => {
+        const dbRef = ref(getDatabase());
+        const snapshot = await get(child(dbRef, `users/${userId}`));
+        const username = snapshot.val().username;
+        setNames(prevNames => ({
+            ...prevNames,
+            [userId]: username
+        }));
+    };
     useEffect(() => {
         const fetchData = async () => {
             const dbRef = ref(getDatabase());
@@ -44,31 +57,45 @@ export default function InterviewerScreen(){
                 snapshot.forEach((childSnapshot) => {
                     const intv=childSnapshot.val();
                     if(intv.creator===user.uid){
-
                         interviewsData.push({ id: childSnapshot.key, ...childSnapshot.val() });
                     }
                 });
                 setInterviews(interviewsData);
             }
-            const snapshot2 = await get(child(dbRef, 'completed-interviews'));
+            const snapshot2 = await get(child(dbRef, 'completed-interviews/'+user.uid));
             if (snapshot2.exists()) {
                 const interviewsData2 = [];
 
                 snapshot2.forEach((childSnapshot) => {
                     const intv=childSnapshot.val();
                     const key=childSnapshot.key;
+                    interviewsData2.push({ id: childSnapshot.key, ...childSnapshot.val() });
 
-                    console.log(key);
-                    for (let i=0;i<interviews.length;i++){
-                        if(interviews[i].creator===user.uid && interviews[i].key===key){
-                            interviewsData2.push({ id: childSnapshot.key, ...childSnapshot.val() });
-                        }
-                    }
                 });
                 selectedsetInterviews(interviewsData2);
                 console.log(selectedinterviews.length);
             }
+            for(let i=0;i<selectedinterviews.length;i++){
+                console.log("Key:"+selectedinterviews[i].id);
+                const snapshot3 = await get(child(dbRef, 'completed-interviews/'+user.uid+"/"+selectedinterviews[i].id)).then();
+                if (snapshot3.exists()) {
+                    const interviewsData2 = [];
+
+                    snapshot3.forEach((childSnapshot) => {
+                        const intv=childSnapshot.val();
+                        const key=childSnapshot.key;
+                        interviewsData2.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                        setInterviewIds(prevNames => ({
+                            ...prevNames,
+                            [key]: selectedinterviews[i].id
+                        }));
+                    });
+                    setFilteredInterviews(interviewsData2);
+                    console.log(selectedinterviews.length);
+                }
+            }
         };
+
 
         fetchData();
         const user=auth.currentUser;
@@ -84,17 +111,44 @@ export default function InterviewerScreen(){
         }).catch((error) => {
             console.error(error);
         });
+        filtered.forEach(interview => {
+            if (!names[interview.id]) {
+                getName(interview.id);
+            }
+        });
     }, []);
 
-    useEffect(() => {
-        const filtered = selectedinterviews.filter(interview => interview.creator === auth.currentUser.uid);
-        setFilteredInterviews(filtered);
-        console.log(filtered.length);
-    }, [interviews, auth.currentUser.uid]);
+    // useEffect(() => {
+    //     const filtered = selectedinterviews.filter(interview => interview.creator === auth.currentUser.uid);
+    //     setFilteredInterviews(filtered);
+    //     console.log(filtered.length);
+    // }, [interviews, auth.currentUser.uid]);
     const handleCardClick = (quiz) => {
         setSelectedQuiz(quiz);
         setShowModal(true);
     };
+    // async function getName(userid) {
+    //     const dbRef = ref(getDatabase());
+    //     let name2='';
+    //     await get(child(dbRef, `users/${userid}`)).then((snapshot) => {
+    //         if (snapshot.exists()) {
+    //             console.log(snapshot.val());
+    //             console.log(snapshot.val().companyName)
+    //             name2 = snapshot.val().username;
+    //         } else {
+    //             console.log("No data available");
+    //         }
+    //     }).catch((error) => {
+    //         console.error(error);
+    //     });
+    //     return name2;
+    // }
+    // const getName = async (userId) => {
+    //     const dbRef = ref(getDatabase());
+    //     const snapshot = await get(child(dbRef, `users/${userId}`));
+    //     console.log(snapshot.val().username);
+    //     return snapshot.exists() ? snapshot.val().username : "No data available";
+    // };
     const handleNavigate= (e)=>{
         navigate('create_quiz');
     }
@@ -109,9 +163,8 @@ export default function InterviewerScreen(){
     }
 
     const handleCardClick2 = (quiz) => {
-        setSelectedQuiz(quiz);
-        setShowAssignModal(true);
-        setAssigningQuiz(quiz);
+        console.log(quiz);
+        navigate('interviewReport',{state:{paramName:quiz}});
     };
 
     const handleAssign = (quizId) => {
@@ -161,6 +214,25 @@ export default function InterviewerScreen(){
                                 <Card.Title>{interview.name}</Card.Title>
                                 <Button variant="primary" onClick={() => handleCardClick(interview)}>View Details</Button>
                                 <Button style={{marginLeft: '20px'}} variant="success" onClick={() => handleCardClick2(interview)} className="ml-2">Assign</Button>
+
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </div>
+            </Container>
+            <Container className="mt-5" >
+                <h2>Completed Interviews</h2>
+                <div className="d-flex flex-wrap">
+                    {filtered.map((interview) => (
+
+                        <Card key={interview.key} className="m-2" style={{ width: '18rem' }}>
+                            <Card.Body>
+                                <Card.Title>{names[interview.id]}</Card.Title>
+                                {/*<Card.Body>*/}
+                                {/*    <div>{names[interview.id]}</div>*/}
+                                {/*</Card.Body>*/}
+                                {/*<Button variant="primary" onClick={() => handleCardClick(interview)}>View Details</Button>*/}
+                                <Button style={{marginLeft: '20px'}} variant="success" onClick={() => handleCardClick2(auth.currentUser.uid+"/"+ InterviewIds[interview.id]+"/"+interview.id)} className="ml-2">View Report</Button>
 
                             </Card.Body>
                         </Card>
