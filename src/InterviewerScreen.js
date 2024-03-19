@@ -38,7 +38,14 @@ export default function InterviewerScreen(){
     const [interviewDetails,setInterviewDetails]=useState();
     const [names, setNames] = useState({});
     const [InterviewIds, setInterviewIds] = useState({});
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [selectedInterviewDetails, setSelectedInterviewDetails] = useState(null);
 
+    const handleDetails = (interview) => {
+        console.log(interview);
+        setSelectedInterviewDetails(interview);
+        setShowDetailsModal(true);
+    };
     const getName = async (userId) => {
         const dbRef = ref(getDatabase());
         const snapshot = await get(child(dbRef, `users/${userId}`));
@@ -52,6 +59,8 @@ export default function InterviewerScreen(){
         const fetchData = async () => {
             const dbRef = ref(getDatabase());
             const snapshot = await get(child(dbRef, 'interviews'));
+
+            const user=auth.currentUser;
             if (snapshot.exists()) {
                 const interviewsData = [];
                 snapshot.forEach((childSnapshot) => {
@@ -94,28 +103,27 @@ export default function InterviewerScreen(){
                     console.log(selectedinterviews.length);
                 }
             }
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    console.log(snapshot.val().companyName)
+                    setName(snapshot.val().username);
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+            filtered.forEach(interview => {
+                if (!names[interview.id]) {
+                    getName(interview.id);
+                }
+            });
         };
 
 
         fetchData();
-        const user=auth.currentUser;
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                console.log(snapshot.val());
-                console.log(snapshot.val().companyName)
-                setName(snapshot.val().username);
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-        filtered.forEach(interview => {
-            if (!names[interview.id]) {
-                getName(interview.id);
-            }
-        });
+
     }, []);
 
     // useEffect(() => {
@@ -212,7 +220,7 @@ export default function InterviewerScreen(){
                         <Card key={interview.id} className="m-2" style={{ width: '18rem' }}>
                             <Card.Body>
                                 <Card.Title>{interview.name}</Card.Title>
-                                <Button variant="primary" onClick={() => handleCardClick(interview)}>View Details</Button>
+                                <Button variant="primary" onClick={() => handleCardClick(interview)}>ViewDetails</Button>
                                 <Button style={{marginLeft: '20px'}} variant="success" onClick={() => handleCardClick2(interview)} className="ml-2">Assign</Button>
 
                             </Card.Body>
@@ -231,7 +239,7 @@ export default function InterviewerScreen(){
                                 {/*<Card.Body>*/}
                                 {/*    <div>{names[interview.id]}</div>*/}
                                 {/*</Card.Body>*/}
-                                {/*<Button variant="primary" onClick={() => handleCardClick(interview)}>View Details</Button>*/}
+                                <Button variant="primary" onClick={() => handleDetails(interview)}>View Details</Button>
                                 <Button style={{marginLeft: '20px'}} variant="success" onClick={() => handleCardClick2(auth.currentUser.uid+"/"+ InterviewIds[interview.id]+"/"+interview.id)} className="ml-2">View Report</Button>
 
                             </Card.Body>
@@ -269,6 +277,44 @@ export default function InterviewerScreen(){
                     <Button variant="secondary" onClick={() => setShowAssignModal(false)}>Close</Button>
                     <Button variant="primary" onClick={handleAssign}>Assign</Button>
                 </Modal.Footer>
+            </Modal>
+            <Modal show={showDetailsModal} onHide={() => setShowDetailsModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Interview Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedInterviewDetails && Object.values(selectedInterviewDetails).map((que, index) => (
+                        <div key={index}>
+                            <h5>{`Question ${index + 1}`}</h5>
+                            <p>{`Question: ${que.
+                                questionContent
+                            }`}</p>
+                            <p>{`Section: ${que.section}`}</p>
+                            {/*<p>{Object.entries(que.question)[0][1]}</p>*/}
+                            {/* Render response based on section type */}
+                            {que.section === 'video' && (
+                                <>
+                                    <p>{`Vi deom Link: ${que.response.video_link}`}</p>
+                                    {/* Render other response data for video section */}
+                                </>
+                            )}
+                            {que.section === 'audio' && (
+                                <>
+                                    <p>{`Audio Link: ${que.link}`}</p>
+                                    {/* Render other response data for audio section */}
+                                </>
+                            )}
+                            {que.section === 'text' && (
+                                <>
+                                    <p>{`Text Response: ${que.response.text}`}</p>
+                                    {/* Render other response data for text section */}
+                                </>
+                            )}
+                            {/* Add styling or structure as needed */}
+                        </div>
+                    ))}
+                </Modal.Body>
+                {/* Additional modal footer or actions if needed */}
             </Modal>
         </>
 
