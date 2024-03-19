@@ -303,10 +303,14 @@ function VideoInterview() {
           </div>
         )}
 
-        {question.section === "video" && isRecording && (
+        {question.section === "video" && (
           <img
-            src={apiLink}
-            alt="Video"
+            src={
+              isRecording
+                ? apiLink
+                : "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+            alt=""
             style={{ width: "80%", height: "80%", objectFit: "cover" }}
           />
         )}
