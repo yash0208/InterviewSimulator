@@ -15,6 +15,7 @@ import {
 } from "firebase/storage";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { ref as sRef } from "firebase/storage";
+import BounceLoader from "react-spinners/BounceLoader.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAIVEam2B1Ws23SW43S3ebkc5lA7aGoVzo",
@@ -127,6 +128,7 @@ function VideoInterview() {
               questionId: questionIndex,
               section: questions[questionIndex].section,
               question: questions[questionIndex],
+              questionContent: questions[questionIndex].question,
               response: response.data,
               link: downloadURL,
             }
@@ -179,6 +181,7 @@ function VideoInterview() {
             questionId: questionIndex,
             section: questions[questionIndex].section,
             question: questions[questionIndex],
+            questionContent: questions[questionIndex].question,
             response: {
               text: textResponse,
               analysis: response.data, // Assuming response.data contains analysis results
@@ -208,10 +211,6 @@ function VideoInterview() {
 
   const submitRecording = () => {
     setIsRecording(false);
-    setApiLink(
-      "https://plus.unsplash.com/premium_photo-1666900440561-94dcb6865554?q=80&w=3240&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    );
-    setApiLink("http://127.0.0.1:8080/video_feed");
 
     axios
       .get("http://127.0.0.1:8080/close_camera")
@@ -235,6 +234,7 @@ function VideoInterview() {
               questionId: questionIndex,
               section: questions[questionIndex].section,
               question: questions[questionIndex],
+              questionContent: questions[questionIndex].question,
               response: response.data,
             }
           );
@@ -245,6 +245,7 @@ function VideoInterview() {
       .catch((error) => {
         console.error("Error stopping recording:", error);
       });
+
     setQuestionIndex((prevIndex) => prevIndex + 1);
     if (questionIndex < questions.length - 1) {
       setQuestion(questions[questionIndex + 1]);
@@ -306,9 +307,11 @@ function VideoInterview() {
           <img
             src={apiLink}
             alt="Video"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ width: "80%", height: "80%", objectFit: "cover" }}
           />
         )}
+
+        {/* {!isRecording && <BounceLoader color="#36d7b7" />} */}
 
         <Components.Button onClick={startRecording}>
           {buttonText}

@@ -133,6 +133,7 @@ function VideoInterview(props) {
             questionId: questionIndex,
             section: questions[questionIndex].section,
             question: questions[questionIndex],
+            questionContent: questions[questionIndex].question,
             response: {
               text: textResponse,
               analysis: response.data, // Assuming response.data contains analysis results
@@ -200,6 +201,7 @@ function VideoInterview(props) {
               questionId: questionIndex,
               question: questions[questionIndex],
               section: questions[questionIndex].section,
+              questionContent: questions[questionIndex].question,
               response: response.data,
               link: downloadURL,
             }
@@ -258,6 +260,7 @@ function VideoInterview(props) {
               questionId: questionIndex,
               question: questions[questionIndex],
               section: questions[questionIndex].section,
+              questionContent: questions[questionIndex].question,
               response: response.data,
             }
           );
