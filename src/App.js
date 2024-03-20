@@ -1,4 +1,4 @@
-import  logo from "./logo.svg";
+import logo from "./logo.svg";
 import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 
@@ -25,16 +25,22 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Header />} />
-          <Route path="auth" element={<Authentication/>}/>
-          <Route path="thank you" element={<ThankYou/>}   />
+          <Route path="auth" element={<Authentication />} />
+          <Route path="thank you" element={<ThankYou />} />
           <Route path="interviewer" element={<InterviewerScreen />} />\
           <Route path="auth/interviewer" element={<InterviewerScreen />} />
           <Route path="auth/interviewer" element={<InterviewerScreen />} />
           <Route path="candidate" element={<CandidateScreen />} />
           <Route path="auth/candidate" element={<CandidateScreen />} />
-          <Route path="interviewer/create_quiz" element={<QuizPage />} />
-          <Route path="auth/candidate/mockre" element={<MockInterviewReport />} />
-          <Route path="auth/interviewer/interviewReport" element={<InterviewReport/>}/>
+          <Route path="auth/interviewer/create_quiz" element={<QuizPage />} />
+          <Route
+            path="auth/candidate/mockre"
+            element={<MockInterviewReport />}
+          />
+          <Route
+            path="auth/interviewer/interviewReport"
+            element={<InterviewReport />}
+          />
           <Route
             path="interviewer/create_quiz/interviewer"
             element={<InterviewerScreen />}
@@ -42,28 +48,18 @@ function App() {
           <Route
             path="/candidate/audio-interview"
             element={<AudioInterview />}
-            />
-            <Route
-                path="auth/candidate/mock"
-                element={<MockInterviewScreen />}
-            />
-
+          />
+          <Route path="auth/candidate/mock" element={<MockInterviewScreen />} />
           <Route
-              path="auth/candidate/interview"
-              element={<InterviewScreen />}
+            path="auth/candidate/interview"
+            element={<InterviewScreen />}
           />
           <Route
             path="/candidate/video-interview"
             element={<VideoInterview />}
           />
-           <Route
-            path="/candidate/text-interview"
-            element={<TextInterview />}
-          />
-           <Route
-            path="/candidate/text-interview/text"
-            element={<Text />}
-          />
+          <Route path="/candidate/text-interview" element={<TextInterview />} />
+          <Route path="/candidate/text-interview/text" element={<Text />} />
         </Routes>
       </BrowserRouter>
     </>

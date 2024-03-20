@@ -68,11 +68,6 @@ export default function InterviewerScreen() {
     setSelectedInterviewDetails(interview);
     setShowDetailsModal(true);
   };
-  const handleCardClick5 = (quiz) => {
-    setSelectedQuiz(quiz);
-    setShowAssignModal(true);
-    setAssigningQuiz(quiz);
-  };
 
   const getName = async (userId) => {
     const dbRef = ref(getDatabase());
@@ -141,7 +136,6 @@ export default function InterviewerScreen() {
         // Fetch filtered interviews
         const filteredInterviews = [];
         for (let i = 0; i < completedInterviewsData.length; i++) {
-          console.log(completedInterviewsData[i].id);
           const interviewSnapshot = await get(
             child(
               dbRef,
@@ -156,9 +150,9 @@ export default function InterviewerScreen() {
                 id: childSnapshot.key,
                 ...intv,
               });
-              setInterviewIds(prevNames => ({
+              setInterviewIds((prevNames) => ({
                 ...prevNames,
-                [childSnapshot.key]: selectedinterviews[i].id
+                [childSnapshot.key]: completedInterviewsData[i].id,
               }));
             });
             filteredInterviews.push(...interviewData);
@@ -233,6 +227,11 @@ export default function InterviewerScreen() {
   const handleCardClick2 = (quiz) => {
     console.log(quiz);
     navigate("interviewReport", { state: { paramName: quiz } });
+  };
+  const handleCardClick5 = (quiz) => {
+    setSelectedQuiz(quiz);
+    setShowAssignModal(true);
+    setAssigningQuiz(quiz);
   };
 
   const handleAssign = (quizId) => {
