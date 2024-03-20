@@ -37,7 +37,12 @@ const Header = () => {
               </li>
               <li>
                 <a className="smoothscroll" id='menu' href="#about" onClick={() => smoothScroll("#about")}>
-                  Abo ut
+                  About
+                </a>
+              </li>
+              <li>
+                <a className="smoothscroll" id='menu' href="#emotion" onClick={() => smoothScroll("#emotion")}>
+                  Testimonials
                 </a>
               </li>
               <li>
