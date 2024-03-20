@@ -18,8 +18,6 @@ body {
 .about-secondHeading {
     display: flex;
     justify-content: center; /* Center the text horizontally */
-    align-items: center; /* Center the text vertically */
-    height: 200px;
 }
 
 .about-heading h1 {
@@ -30,28 +28,21 @@ body {
 }
 
 .about-container {
-  padding: 30px;
-
   display: flex;
   justify-content: space-between; /* Distribute items evenly */
   flex-wrap: wrap; /* Allow items to wrap */
 }
 
 .about-item {
-  background: white;
-    padding: 10px;
-  border-radius: 10px;
-  height: 500px;
   flex-basis: calc(
-    30% - 10px
+    33.33% - 10px
   ); /* Adjust width based on the number of items */
-  margin-bottom: 20px;
   text-align: center; /* Center the text horizontally */
 }
 
 .about-item img {
-  width: 100%; /* Make the image fill its container */
-  height: 400px; /* Make the image fill its container */
+  width: 97.5%; /* Make the image fill its container */
+  height: 60%; /* Make the image fill its container */
   object-fit: cover; /* Maintain aspect ratio and cover the entire container */
 }
 
@@ -68,11 +59,11 @@ body {
     top: 0%; /* Position images vertically centered */
     animation: moveRight 10s linear forwards; /* Move from left to right in 8 seconds */
     opacity: 1; /* Start with opacity 1 */
-    /*margin: -50px; !* Remove default margin *!*/
-    padding: -20px; /* Remove default padding */
-    margin-top: -20px;
+    margin: -50; /* Remove default margin */
+    padding: -20; /* Remove default padding */
+    margin-top: -20;
   }
-
+  
   /* Define animation keyframes */
   @keyframes moveRight {
     from {
@@ -80,10 +71,10 @@ body {
     }
     to {
       left: 100%; /* Move to the right (disappear from the screen) */
-
+      
     }
   }
-
+  
   .about-para {
     color: #000000; /* White text color */
     margin: 0; /* Remove default margin */
@@ -91,7 +82,7 @@ body {
     font-size: 54px;
     text-align: center;
   }
-
+  
   .about-para h1 {
     margin: 60; /* Remove default margin */
     display: block;
@@ -104,7 +95,6 @@ body {
   }
 
   .emotion-container {
-    overflow-x: clip;
     display: flex;
     justify-content: center; /* Center align the items */
     align-items: center; /* Center align the items */
@@ -112,9 +102,8 @@ body {
   }
 
   .about-emotion img {
-
-    width: 40%; /* Make the image fill its container */
-    height: auto; /* Make the image fill its container */
+    width: 45.5%; /* Make the image fill its container */
+    height: 400px; /* Make the image fill its container */
     object-fit: cover; /* Maintain aspect ratio and cover the entire container */
     color: #000000; /* White text color */
     font-family: "Montserrat", sans-serif; /* Montserrat font */
@@ -128,4 +117,4 @@ color: black !important;
 
 .slick-next:before {
 color: black !important;
-}
+} 

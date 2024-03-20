@@ -6,7 +6,7 @@ const ThankYouPage = () => {
     <div className="thank-you-container">
       <h1 className="thank-you-heading">Thank You!</h1>
       <p className="thank-you-message">Your interview has been recorded and statistics sent to the Interviewer.</p>
-      {}
+    
     </div>
   );
 };
