@@ -68,6 +68,11 @@ export default function InterviewerScreen() {
     setSelectedInterviewDetails(interview);
     setShowDetailsModal(true);
   };
+  const handleCardClick5 = (quiz) => {
+    setSelectedQuiz(quiz);
+    setShowAssignModal(true);
+    setAssigningQuiz(quiz);
+  };
 
   const getName = async (userId) => {
     const dbRef = ref(getDatabase());
@@ -136,6 +141,7 @@ export default function InterviewerScreen() {
         // Fetch filtered interviews
         const filteredInterviews = [];
         for (let i = 0; i < completedInterviewsData.length; i++) {
+          console.log(completedInterviewsData[i].id);
           const interviewSnapshot = await get(
             child(
               dbRef,
@@ -150,6 +156,10 @@ export default function InterviewerScreen() {
                 id: childSnapshot.key,
                 ...intv,
               });
+              setInterviewIds(prevNames => ({
+                ...prevNames,
+                [childSnapshot.key]: selectedinterviews[i].id
+              }));
             });
             filteredInterviews.push(...interviewData);
             console.log(`Filtered interview length: ${interviewData.length}`);
@@ -295,7 +305,7 @@ export default function InterviewerScreen() {
                 <Button
                   style={{ marginLeft: "20px" }}
                   variant="success"
-                  onClick={() => handleCardClick2(interview)}
+                  onClick={() => handleCardClick5(interview)}
                   className="ml-2"
                 >
                   Assign

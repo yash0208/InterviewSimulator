@@ -1,14 +1,18 @@
 /* Add CSS styles for About component */
 
 #about {
-    font-family: 'Montserrat', sans-serif; /* Montserrat font */
+  font-family: "Montserrat", sans-serif; /* Montserrat font */
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
 }
 
 .about-heading {
-    display: flex;
-    justify-content: center; /* Center the text horizontally */
-    align-items: center; /* Center the text vertically */
-    height: 200px; /* Set a fixed height for vertical alignment */
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  height: 200px; /* Set a fixed height for vertical alignment */
 }
 
 .about-secondHeading {
@@ -20,28 +24,30 @@
 }
 
 .about-heading h1 {
-    color: #000000; /* White text color */
-    margin: 0; /* Remove default margin */
-    font-family: 'Montserrat', sans-serif; /* Montserrat font */
-    font-size: 54px;
+  color: #000000; /* White text color */
+  margin: 0; /* Remove default margin */
+  font-family: "Montserrat", sans-serif; /* Montserrat font */
+  font-size: 54px;
 }
 
 .about-container {
-    display: flex;
-    justify-content: space-between; /* Distribute items evenly */
-    flex-wrap: wrap; /* Allow items to wrap */
+  display: flex;
+  justify-content: space-between; /* Distribute items evenly */
+  flex-wrap: wrap; /* Allow items to wrap */
 }
 
 .about-item {
-    flex-basis: calc(33.33% - 10px); /* Adjust width based on the number of items */
-    margin-bottom: 20px;
-    text-align: center; /* Center the text horizontally */
+  flex-basis: calc(
+    33.33% - 10px
+  ); /* Adjust width based on the number of items */
+  margin-bottom: 20px;
+  text-align: center; /* Center the text horizontally */
 }
 
 .about-item img {
-    width: 97.5%; /* Make the image fill its container */
-    height: 60%; /* Make the image fill its container */
-    object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+  width: 97.5%; /* Make the image fill its container */
+  height: 60%; /* Make the image fill its container */
+  object-fit: cover; /* Maintain aspect ratio and cover the entire container */
 }
 
 .about-item p {
@@ -115,5 +121,4 @@ color: black !important;
 
 .slick-next:before {
 color: black !important;
-}
-  
+} 
