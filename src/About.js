@@ -56,12 +56,12 @@ class About extends Component {
       <>
 
         <section id="about">
-        
+
           <div className="about-heading">
             <h1>What We Offer</h1>
           </div>
           <div className="about-container">
-            <div className="about-item">
+            <div className="about-item" >
               <img src={audioimage} alt="Image 1" />
               <p>We determine the emotional state of the interviewee with the change in tones of their speech.</p>
             </div>
@@ -76,13 +76,13 @@ class About extends Component {
           </div>
           </section>
 
-          
+
           <div className="about-secondHeading">
           <h1 >Emotion Analysis</h1>
           </div>
-            
-          
-          <div className="emotion-container">
+
+
+          <div className="emotion-container" >
             {images.map((image) => (
               <div key={image.id} className="about-emotion">
                 {/* Render the moving image */}
@@ -94,7 +94,7 @@ class About extends Component {
               </div>
                ))}
                </div>
-        
+
       </>
     );
   }

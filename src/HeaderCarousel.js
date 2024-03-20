@@ -66,29 +66,31 @@ const HeaderCarousel = () => {
   };
 
   return (
-    <div className="slider-container">
-      <h1 className="text-center">Stories from the Interview Chair</h1>
-      <p className="text-center" style={{ fontSize: "1.2rem" }}>
-        Unveiling sample interview dynamics
-      </p>
-      <Slider {...settings} style={{ maxWidth: "95%", margin: "0 auto" }}>
-        {listOfVideos.map((videoItem) => {
-          return (
-            <div key={videoItem.name}>
-              {/* <img
+      <section id="emotion">
+        <div className="slider-container">
+          <h1 className="text-center">Stories from the Interview Chair</h1>
+          <p className="text-center" style={{ fontSize: "1.2rem" }}>
+            Unveiling sample interview dynamics
+          </p>
+          <Slider {...settings} style={{ maxWidth: "95%", margin: "0 auto" }}>
+            {listOfVideos.map((videoItem) => {
+              return (
+                  <div key={videoItem.name}>
+                    {/* <img
                 src={videoItem.videoSrc}
                 alt={videoItem.name}
                 style={{ width: "100%", padding: 10 }}
               /> */}
-              <video controls style={{ width: "100%", padding: 10 }}>
-                <source src={videoItem.videoSrc} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          );
-        })}
-      </Slider>
-    </div>
+                    <video controls style={{ width: "100%", padding: 10 }}>
+                      <source src={videoItem.videoSrc} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+              );
+            })}
+          </Slider>
+        </div>
+      </section>
   );
 };
 
