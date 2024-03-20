@@ -63,6 +63,12 @@ const Report = () => {
     let [le,setLe]=useState(0);
     let [ri,setRi]=useState(0);
     let [ce,setCe]=useState(0);
+    let emotions={
+        "hap":"Happy",
+        "sad":"Sad",
+        "neu":"Neutral",
+        "ang":"Angry"
+    }
     const { state } = useLocation();
     const { paramName } = state;
     async function fetchData() {
@@ -148,93 +154,100 @@ const Report = () => {
     return (!loading && <div className="report-container" style={{backgroundColor: '#f1f3f7'}}>
             <h1>Report Page</h1><br /><br />
 
-            <div className="report-section" style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
+            <div className="report-section" >
                 <h2>Text Analysis</h2>
                 {/* Insert the rotated bar charts here */}
-                <div className="graph-container" >
-                    <div className="bar-graph rotated" style={{weight: '900px'}}>
-                        <BarChart
-                            yAxis={[
-                                {
-                                    id: 'barCategories',
-                                    data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
-                                    scaleType: 'band',
-                                },
-                            ]}
-                            series={[
-                                // {
-                                //     data: [2, 5, 3, 7, 1],
-                                // },
-                                {
-                                    data: [op*100, co*100, ex*100, ag*100, nr*100],
-                                }
-                            ]}
-                            width={800}
-                            height={500}
-                            layout="horizontal"
-                            sx={{
-                                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
-                                    fontFamily: "'Montserrat', sans-serif",
-                                },
-                            }}
-                        />
+                <div style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
+
+                    <div className="graph-container" >
+                        <div className="bar-graph rotated" style={{weight: '900px'}}>
+                            <BarChart
+                                yAxis={[
+                                    {
+                                        id: 'barCategories',
+                                        data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
+                                        scaleType: 'band',
+                                    },
+                                ]}
+                                series={[
+                                    // {
+                                    //     data: [2, 5, 3, 7, 1],
+                                    // },
+                                    {
+                                        data: [op*100, co*100, ex*100, ag*100, nr*100],
+                                    }
+                                ]}
+                                width={800}
+                                height={500}
+                                layout="horizontal"
+                                sx={{
+                                    "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
+                                        fontFamily: "'Montserrat', sans-serif",
+                                    },
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="legend">
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
-                        <div className="legend-label">Your Personality Analysis</div>
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                            <div className="legend-label">Your Personality Analysis</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="report-section">
                 <h2>Audio Analysis</h2>
 
-                <p>The overall emotion analysis of the audio interview : {audio[audio.length-1].response.result[0]} </p>
+                <p>The overall emotion analysis of the audio interview : {emotions[audio[audio.length-1].response.result[0]]} </p>
                 {/* Insert the rotated bar charts here */}
-                <div className="graph-container">
-                    <div className="bar-graph rotated">
-                        <BarChart
-                            xAxis={[
-                                {
-                                    id: 'barCategories',
-                                    data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
-                                    scaleType: 'band',
-                                },
-                            ]}
-                            series={[
-                                {
-                                    data: [2, 5, 3, 7, 1],
-                                },
-                                {
-                                    data: [aop*100, aco*100, aex*100, aag*100, anr*100],
-                                }
-                            ]}
-                            width={1300}
-                            height={700}
-                            sx={{
-                                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
-                                    fontFamily: "'Montserrat', sans-serif",
-                                },
-                            }}
-                        />
+                <div style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
+
+                    <div className="graph-container">
+                        <div className="bar-graph rotated">
+                            <BarChart
+                                xAxis={[
+                                    {
+                                        id: 'barCategories',
+                                        data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
+                                        scaleType: 'band',
+                                    },
+                                ]}
+                                series={[
+                                    // {
+                                    //     data: [2, 5, 3, 7, 1],
+                                    // },
+                                    {
+                                        data: [aop*100, aco*100, aex*100, aag*100, anr*100],
+                                    }
+                                ]}
+                                width={1300}
+                                height={700}
+                                sx={{
+                                    "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
+                                        fontFamily: "'Montserrat', sans-serif",
+                                    },
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="legend">
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
-                        <div className="legend-label">Your Personality</div>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
-                        <div className="legend-label">General Average</div>
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                            <div className="legend-label">Your Personality</div>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
+                            <div className="legend-label">General Average</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div className="report-section">
                 <h2>Video Analysis: Gaze</h2><br></br><br></br><br></br>
-                <div className="graph-container">
+
+                <div className="graph-container" style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
                     <div className="pie-chart">
                         <PieChart
                             series={[
@@ -250,63 +263,66 @@ const Report = () => {
                             height={400}
                         />
                     </div>
-                    <div className="pie-chart">
-                        <PieChart
-                            series={[
-                                {
-                                    data: [
-                                        { id: 0, value: 10, label: 'series A' },
-                                        { id: 1, value: 15, label: 'series B' },
-                                        { id: 2, value: 20, label: 'series C' },
-                                    ],
-                                },
-                            ]}
-                            width={600}
-                            height={400}
-                        />
-                    </div>
+                    {/*<div className="pie-chart">*/}
+                    {/*    <PieChart*/}
+                    {/*        series={[*/}
+                    {/*            {*/}
+                    {/*                data: [*/}
+                    {/*                    { id: 0, value: 10, label: 'series A' },*/}
+                    {/*                    { id: 1, value: 15, label: 'series B' },*/}
+                    {/*                    { id: 2, value: 20, label: 'series C' },*/}
+                    {/*                ],*/}
+                    {/*            },*/}
+                    {/*        ]}*/}
+                    {/*        width={600}*/}
+                    {/*        height={400}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
                 </div>
             </div>
             <div className="report-section">
                 <h2>Video Analysis: Emotion</h2>
-                <div className="graph-container">
-                    <div className="bar-graph">
-                        <BarChart
-                            xAxis={[
-                                {
-                                    id: 'barCategories',
-                                    data: ['Happy', 'Angry', 'Disgust', 'Sad', 'Fear', 'Surprise', 'Neutral'],
-                                    scaleType: 'band',
-                                },
-                            ]}
-                            series={[
-                                {
-                                    data: [2, 5, 3, 2, 3 ,1, 9],
-                                },
-                                {
-                                    data: [hp, an, di, sa, fr, su, nu],
-                                }
-                            ]}
-                            width={1300}
-                            height={700}
-                            sx={{
-                                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
-                                    fontFamily: "'Montserrat', sans-serif",
-                                },
-                            }}
-                        />
+                <div style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
+                    <div className="graph-container">
+                        <div className="bar-graph">
+                            <BarChart
+                                xAxis={[
+                                    {
+                                        id: 'barCategories',
+                                        data: ['Happy', 'Angry', 'Disgust', 'Sad', 'Fear', 'Surprise', 'Neutral'],
+                                        scaleType: 'band',
+                                    },
+                                ]}
+                                series={[
+                                    // {
+                                    //     data: [2, 5, 3, 2, 3 ,1, 9],
+                                    // },
+                                    {
+                                        data: [hp, an, di, sa, fr, su, nu],
+                                    }
+                                ]}
+                                width={1300}
+                                height={700}
+                                sx={{
+                                    "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
+                                        fontFamily: "'Montserrat', sans-serif",
+                                    },
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
+                            <div className="legend-label">Your Emotions</div>
+                        </div>
+                        {/*<div className="legend-item">*/}
+                        {/*    <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>*/}
+                        {/*    <div className="legend-label">General Average</div>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
-                <div className="legend">
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
-                        <div className="legend-label">Your Emotions</div>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
-                        <div className="legend-label">General Average</div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
