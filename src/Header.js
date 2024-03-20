@@ -2,7 +2,10 @@ import React from "react";
 import ParticlesBg from "particles-bg";
 import './Header.css';
 import About from "./About";
+import HeaderCarousel from "./HeaderCarousel";
+
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -51,6 +54,8 @@ const Header = () => {
 
         </header>
         <About/>
+        <HeaderCarousel />
+        <Footer />
       </>
   );
 }
