@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { child, get, getDatabase, ref } from "firebase/database";
 import * as Components from "./AudioComponents.js";
 import axios from "axios";
@@ -8,6 +7,8 @@ import { set, push } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import loader from "./assets/loader.gif";
+import { useNavigate } from "react-router-dom";
 import {
   getStorage,
   uploadBytesResumable,
@@ -62,6 +63,7 @@ function VideoInterview() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const goBack = () => navigate("/auth/candidate");
 
   useEffect(() => {
     alert(
@@ -141,6 +143,7 @@ function VideoInterview() {
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
         } else {
+          goBack();
           alert("All questions answered. Submitting recording...");
         }
       })
@@ -185,16 +188,18 @@ function VideoInterview() {
             questionContent: questions[questionIndex].question,
             response: {
               text: textResponse,
-              analysis: response.data, // Assuming response.data contains analysis results
+              analysis: response.data,
             },
           }
         );
+
         setAnswer("");
         // Proceed to the next question or perform other actions
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
         } else {
+          goBack();
           alert("All questions answered. Submitting recording...");
         }
       } else {
@@ -252,6 +257,7 @@ function VideoInterview() {
     if (questionIndex < questions.length - 1) {
       setQuestion(questions[questionIndex + 1]);
     } else {
+      goBack();
       alert("All questions answered. Submitting recording...");
     }
   };
@@ -309,17 +315,20 @@ function VideoInterview() {
             </div>
           ))}
 
-        {question.section === "video" && (
-          <img
-            src={
-              isRecording
-                ? apiLink
-                : "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            }
-            alt=""
-            style={{ width: "40%", height: "40%", objectFit: "cover" }}
-          />
-        )}
+        {question.section === "video" &&
+          (!isRecording ? (
+            <img
+              src={loader}
+              alt=""
+              style={{ width: "20%", height: "20%", objectFit: "cover" }}
+            />
+          ) : (
+            <img
+              src={apiLink}
+              alt=""
+              style={{ width: "50%", height: "50%", objectFit: "cover" }}
+            />
+          ))}
 
         {question.section !== "audio" && !isRecording && (
           <Components.Button onClick={startRecording}>
