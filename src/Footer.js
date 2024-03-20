@@ -41,7 +41,7 @@ const Footer = () => {
           <div className="container text-center text-md-start mt-5">
             <div className="row mt-3">
               <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold">Company name</h6>
+                <h6 className="text-uppercase fw-bold">IntuitiHire</h6>
                 <hr
                   className="mb-4 mt-0 d-inline-block mx-auto"
                   style={{
@@ -51,14 +51,12 @@ const Footer = () => {
                   }}
                 />
                 <p>
-                  Here you can use rows and columns to organize your footer
-                  content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit.
+                 Revolutionizing virtual job interviews with cutting-edge AI for fairer, more insightful hiring decisions
                 </p>
               </div>
 
               <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold">Products</h6>
+                <h6 className="text-uppercase fw-bold">Social Media</h6>
                 <hr
                   className="mb-4 mt-0 d-inline-block mx-auto"
                   style={{
@@ -68,23 +66,23 @@ const Footer = () => {
                   }}
                 />
                 <p>
-                  <a href="#!" className="text-dark">
-                    MDBootstrap
+                  <a href="https://www.linkedin.com/company/IntuitiHire/" className="text-dark">
+                    LinkedIn
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-dark">
-                    MDWordPress
+                  <a href="https://twitter.com/i/flow/login?redirect_after_login=%2FIntuitiHire" className="text-dark">
+                    Twitter
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-dark">
-                    BrandFlow
+                  <a href="https://www.instagram.com/IntuitiHire/" className="text-dark">
+                    Instagram
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-dark">
-                    Bootstrap Angular
+                  <a href="https://www.facebook.com/IntuitiHire" className="text-dark">
+                    Facebook
                   </a>
                 </p>
               </div>
@@ -101,19 +99,19 @@ const Footer = () => {
                 />
                 <p>
                   <a href="#!" className="text-dark">
-                    Your Account
+                  Terms and Conditions
                   </a>
                 </p>
                 <p>
                   <a href="#!" className="text-dark">
-                    Become an Affiliate
+                  Privacy Policy
                   </a>
                 </p>
-                <p>
+                {/* <p>
                   <a href="#!" className="text-dark">
                     Shipping Rates
                   </a>
-                </p>
+                </p> */}
                 <p>
                   <a href="#!" className="text-dark">
                     Help
@@ -132,16 +130,16 @@ const Footer = () => {
                   }}
                 />
                 <p>
-                  <i className="fas fa-home mr-3"></i> New York, NY 10012, US
+                  <i className="fas fa-home mr-3"></i> Canada, CA H3H2P1
                 </p>
                 <p>
-                  <i className="fas fa-envelope mr-3"></i> info@example.com
+                  <i className="fas fa-envelope mr-3"></i> contact@intuitihire.com
                 </p>
                 <p>
-                  <i className="fas fa-phone mr-3"></i> + 01 234 567 88
+                  <i className="fas fa-phone mr-3"></i> + 01 438 725 1807
                 </p>
                 <p>
-                  <i className="fas fa-print mr-3"></i> + 01 234 567 89
+                  <i className="fas fa-print mr-3"></i> + 01 514 557 1810
                 </p>
               </div>
             </div>
@@ -152,10 +150,8 @@ const Footer = () => {
           className="text-center p-3"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
         >
-          © 2020 Copyright:
-          <a className="text-dark" href="https://mdbootstrap.com/">
-            MDBootstrap.com
-          </a>
+          © 2023 Intutihire.All Rights Reserved.
+          
         </div>
       </footer>
     </div>
