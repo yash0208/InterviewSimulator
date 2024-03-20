@@ -4,8 +4,54 @@ import audioimage from './assets/audio.jpg';
 import videoimage from './assets/video.jpg';
 import textimage from './assets/text.jpg';
 
+import img1 from './assets/img1.jpg';
+import img2 from './assets/img2.jpg';
+import img3 from './assets/img3.jpg';
+import img4 from './assets/img4.jpg';
+import img5 from './assets/img5.jpg';
+import img6 from './assets/img6.jpg';
+import img7 from './assets/img7.jpg';
+import img8 from './assets/img8.jpg';
+import img9 from './assets/img9.jpg';
+
 class About extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: [
+        { src: img1, id: 1 },
+        { src: img2, id: 2 },
+        { src: img3, id: 3 },
+        { src: img4, id: 4 },
+        { src: img5, id: 5 },
+        { src: img6, id: 6 },
+        { src: img7, id: 7 },
+        { src: img8, id: 8 },
+        { src: img9, id: 9 }
+      ],
+    };
+  }
+
+  componentDidMount() {
+    // Set up the animation timer
+    this.animationTimer = setInterval(() => {
+      this.setState((prevState) => {
+        const firstImage = prevState.images[0];
+        const images = prevState.images.slice(1); // Remove the first image
+        images.push(firstImage); // Add the removed image to the end
+        return { images };
+      });
+    }, 3000); // Change image every 3 seconds
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.animationTimer); // Clear the animation timer when unmounting
+  }
+
   render() {
+
+    const { images } = this.state;
     return (
       <>
 
@@ -28,7 +74,27 @@ class About extends Component {
               <p>With the lingual analysis we figure out the interviewee's Ocean's personality.</p>
             </div>
           </div>
-        </section>
+          </section>
+
+          
+          <div className="about-secondHeading">
+          <h1 >Emotion Analysis</h1>
+          </div>
+            
+          
+          <div className="emotion-container">
+            {images.map((image) => (
+              <div key={image.id} className="about-emotion">
+                {/* Render the moving image */}
+                <img
+                  src={image.src}
+                  alt="Image"
+                  className={`moving-image`}
+                />
+              </div>
+               ))}
+               </div>
+        
       </>
     );
   }
