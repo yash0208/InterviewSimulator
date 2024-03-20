@@ -16,10 +16,11 @@ body {
 }
 
 .about-secondHeading {
-  display: flex;
-  justify-content: center; /* Center the text horizontally */
-  align-items: center; /* Center the text vertically */
-  height: 200px;
+    display: flex;
+    justify-content: center; /* Center the text horizontally */
+    align-items: center; /* Center the text vertically */
+    height: 200px; /* Set a fixed height for vertical alignment */
+    margin-top: -18%;
 }
 
 .about-heading h1 {
@@ -30,102 +31,61 @@ body {
 }
 
 .about-container {
-  padding: 30px;
-
   display: flex;
   justify-content: space-between; /* Distribute items evenly */
   flex-wrap: wrap; /* Allow items to wrap */
 }
 
 .about-item {
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  height: 500px;
   flex-basis: calc(
-          30% - 10px
+    33.33% - 10px
   ); /* Adjust width based on the number of items */
   margin-bottom: 20px;
   text-align: center; /* Center the text horizontally */
 }
 
 .about-item img {
-  width: 100%; /* Make the image fill its container */
-  height: 400px; /* Make the image fill its container */
+  width: 97.5%; /* Make the image fill its container */
+  height: 60%; /* Make the image fill its container */
   object-fit: cover; /* Maintain aspect ratio and cover the entire container */
 }
 
 .about-item p {
-  color: #000000; /* White text color */
-  font-family: 'Montserrat', sans-serif; /* Montserrat font */
-  font-size: 18px;
-  text-align: start;
+    color: #000000; /* White text color */
+    font-family: 'Montserrat', sans-serif; /* Montserrat font */
+    font-size: 18px;
+    text-align: start;
 }
 
-
-.moving-image {
-  position: absolute;
-  top: 0%; /* Position images vertically centered */
-  animation: moveRight 10s linear forwards; /* Move from left to right in 8 seconds */
-  opacity: 1; /* Start with opacity 1 */
-  /*margin: -50px; !* Remove default margin *!*/
-  padding: -20px; /* Remove default padding */
-  margin-top: -20px;
-}
-
-/* Define animation keyframes */
-@keyframes moveRight {
-  from {
-    left: -100%; /* Start from the left of the container */
+  .about-para {
+    color: #000000; /* White text color */
+    margin: 0; /* Remove default margin */
+    font-family: 'Montserrat', sans-serif; /* Montserrat font */
+    font-size: 54px;
+    text-align: center;
   }
-  to {
-    left: 100%; /* Move to the right (disappear from the screen) */
-
+  
+  .about-para h1 {
+    margin: 60; /* Remove default margin */
+    display: block;
+    color: #000000; /* White text color */
+    margin: 0; /* Remove default margin */
+    font-family: 'Montserrat', sans-serif; /* Montserrat font */
+    text-align: left;
+    position: relative;
+    /* font-size: 54px; */
   }
-}
 
-.about-para {
-  color: #000000; /* White text color */
-  margin: 0; /* Remove default margin */
-  font-family: 'Montserrat', sans-serif; /* Montserrat font */
-  font-size: 54px;
-  text-align: center;
-}
-
-.about-para h1 {
-  margin: 60; /* Remove default margin */
-  display: block;
-  color: #000000; /* White text color */
-  margin: 0; /* Remove default margin */
-  font-family: 'Montserrat', sans-serif; /* Montserrat font */
-  text-align: left;
-  position: relative;
-  /* font-size: 54px; */
-}
-
-.emotion-container {
-  overflow-x: clip;
-  display: flex;
-  justify-content: center; /* Center align the items */
-  align-items: center; /* Center align the items */
-  position: relative; /* Required for absolute positioning of images */
-}
-
-.about-emotion img {
-
-  width: 40%; /* Make the image fill its container */
-  height: auto; /* Make the image fill its container */
-  object-fit: cover; /* Maintain aspect ratio and cover the entire container */
-  color: #000000; /* White text color */
-  font-family: "Montserrat", sans-serif; /* Montserrat font */
-  font-size: 18px;
-  text-align: start;
-}
+  .emotion-container {
+    padding: 5rem 0;
+    margin-top: -8%;
+  }
+  
 
 .slick-prev:before {
-  color: black !important;
+color: black !important;
 }
 
 .slick-next:before {
-  color: black !important;
-}
+color: black !important;
+} 

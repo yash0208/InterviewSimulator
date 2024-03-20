@@ -14,6 +14,32 @@ import img7 from './assets/img7.jpg';
 import img8 from './assets/img8.jpg';
 import img9 from './assets/img9.jpg';
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function PrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    />
+  );
+}
+
 class About extends Component {
 
   constructor(props) {
@@ -49,19 +75,33 @@ class About extends Component {
     clearInterval(this.animationTimer); // Clear the animation timer when unmounting
   }
 
+  
+  
   render() {
+    const settings = {
+      dots: true,
+      infinite: true,
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      autoplay: true,
+      speed: 2000,
+      autoplaySpeed: 2000,
+      cssEase: "linear",
+      nextArrow: <NextArrow />,
+      prevArrow: <PrevArrow />,
+    };
 
     const { images } = this.state;
     return (
       <>
 
         <section id="about">
-
+        
           <div className="about-heading">
             <h1>What We Offer</h1>
           </div>
           <div className="about-container">
-            <div className="about-item" >
+            <div className="about-item">
               <img src={audioimage} alt="Image 1" />
               <p>We determine the emotional state of the interviewee with the change in tones of their speech.</p>
             </div>
@@ -76,28 +116,37 @@ class About extends Component {
           </div>
           </section>
 
-
+          
           <div className="about-secondHeading">
           <h1 >Emotion Analysis</h1>
           </div>
-
-
-          <div className="emotion-container" >
+            
+          
+          <div className="emotion-container">
+          <Slider {...settings} style={{ maxWidth: "95%", margin: "0 auto" }}>
             {images.map((image) => (
               <div key={image.id} className="about-emotion">
                 {/* Render the moving image */}
                 <img
                   src={image.src}
                   alt="Image"
-                  className={`moving-image`}
+                  
+                  // className={`moving-image`}
+                  style={{ width: "100%", padding: 10 }}
                 />
               </div>
                ))}
+          </Slider>
                </div>
-
+          
       </>
     );
   }
 }
 
 export default About;
+{/* <img
+                src={videoItem.videoSrc}
+                alt={videoItem.name}
+                style={{ width: "100%", padding: 10 }}
+              /> */}
