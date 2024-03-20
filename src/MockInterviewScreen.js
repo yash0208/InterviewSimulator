@@ -189,7 +189,7 @@ function VideoInterview() {
             },
           }
         );
-
+        setAnswer("");
         // Proceed to the next question or perform other actions
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
@@ -317,7 +317,7 @@ function VideoInterview() {
                 : "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             }
             alt=""
-            style={{ width: "80%", height: "80%", objectFit: "cover" }}
+            style={{ width: "40%", height: "40%", objectFit: "cover" }}
           />
         )}
 

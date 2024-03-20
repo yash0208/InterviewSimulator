@@ -59,7 +59,9 @@ function VideoInterview(props) {
   const [question, setQuestion] = useState(null); // Set initial state to null
   const [answer, setAnswer] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
+  const [apiLink, setApiLink] = useState(
+    "http://127.0.0.1:8080/video_feed_real"
+  );
   const [interviewer, setInterviewer] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -144,6 +146,7 @@ function VideoInterview(props) {
         );
 
         // Proceed to the next question or perform other actions
+        setAnswer("");
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
@@ -232,7 +235,6 @@ function VideoInterview(props) {
 
   const submitRecording = () => {
     setIsRecording(false);
-    setApiLink("http://127.0.0.1:8080/video_feed");
     axios
       .get("http://127.0.0.1:8080/close_camera")
       .then((response) => {
@@ -272,7 +274,6 @@ function VideoInterview(props) {
       .catch((error) => {
         console.error("Error stopping recording:", error);
       });
-    setApiLink("http://127.0.0.1:8080/video_feed");
 
     setQuestionIndex((prevIndex) => prevIndex + 1);
     if (questionIndex < questions.length - 1) {
@@ -296,7 +297,7 @@ function VideoInterview(props) {
     buttonText = "Start Recording";
   } else if (question.section === "text") {
     bannerText = "Text Question";
-    buttonText = "Start Typing";
+    buttonText = "Submit Answer";
   }
 
   return (
@@ -341,7 +342,7 @@ function VideoInterview(props) {
                 : "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             }
             alt=""
-            style={{ width: "80%", height: "80%", objectFit: "cover" }}
+            style={{ width: "40%", height: "40%", objectFit: "cover" }}
           />
         )}
         {question.section !== "audio" && !isRecording && (
