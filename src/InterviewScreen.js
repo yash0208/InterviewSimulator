@@ -16,6 +16,7 @@ import {
 } from "firebase/storage";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { ref as sRef } from "firebase/storage";
+import { BounceLoader } from "react-spinners";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAIVEam2B1Ws23SW43S3ebkc5lA7aGoVzo",
@@ -61,6 +62,7 @@ function VideoInterview(props) {
   const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
   const [interviewer, setInterviewer] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const { state } = useLocation();
   const { paramName } = state;
@@ -123,13 +125,13 @@ function VideoInterview(props) {
               "/" +
               paramName +
               "/" +
-              user.uid +
+              auth.currentUser.uid +
               "/" +
               questionIndex
           ),
           {
-            creator: user.uid,
-            candidate: user.uid,
+            creator: auth.currentUser.uid,
+            candidate: auth.currentUser.uid,
             questionId: questionIndex,
             section: questions[questionIndex].section,
             question: questions[questionIndex],
@@ -191,13 +193,13 @@ function VideoInterview(props) {
                 "/" +
                 paramName +
                 "/" +
-                user.uid +
+                auth.currentUser.uid +
                 "/" +
                 questionIndex
             ),
             {
-              creator: user.uid,
-              candidate: user.uid,
+              creator: auth.currentUser.uid,
+              candidate: auth.currentUser.uid,
               questionId: questionIndex,
               question: questions[questionIndex],
               section: questions[questionIndex].section,
@@ -209,6 +211,7 @@ function VideoInterview(props) {
         } else {
           console.error("No result received");
         }
+        setLoading(false);
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
@@ -223,6 +226,7 @@ function VideoInterview(props) {
 
   const addAudioElement = (blob) => {
     // Upload audio to Firebase Storage
+    setLoading(true);
     uploadAudioToFirebase(blob);
   };
 
@@ -247,13 +251,13 @@ function VideoInterview(props) {
                 "/" +
                 paramName +
                 "/" +
-                user.uid +
+                auth.currentUser.uid +
                 "/" +
                 questionIndex
             ),
             {
-              creator: user.uid,
-              candidate: user.uid,
+              creator: auth.currentUser.uid,
+              candidate: auth.currentUser.uid,
               questionId: questionIndex,
               question: questions[questionIndex],
               section: questions[questionIndex].section,
@@ -289,7 +293,7 @@ function VideoInterview(props) {
     buttonText = "Start Recording";
   } else if (question.section === "audio") {
     bannerText = "Audio Question";
-    buttonText = "Start Recording (1min)";
+    buttonText = "Start Recording";
   } else if (question.section === "text") {
     bannerText = "Text Question";
     buttonText = "Start Typing";
@@ -312,21 +316,23 @@ function VideoInterview(props) {
             placeholder="Type your answer here..."
           />
         )}
-
-        {question.section === "audio" && (
-          <div>
-            <AudioRecorder
-              onRecordingComplete={addAudioElement}
-              audioTrackConstraints={{
-                noiseSuppression: true,
-                echoCancellation: true,
-              }}
-              downloadOnSavePress={false}
-              downloadFileExtension="wav"
-            />
-          </div>
-        )}
-
+        {question.section === "audio" &&
+          (loading ? (
+            <BounceLoader color="#36d7b7" />
+          ) : (
+            <div>
+              <AudioRecorder
+                onRecordingComplete={addAudioElement}
+                audioTrackConstraints={{
+                  noiseSuppression: true,
+                  echoCancellation: true,
+                }}
+                downloadOnSavePress={false}
+                downloadFileExtension="wav"
+                showVisualizer={true}
+              />
+            </div>
+          ))}
         {question.section === "video" && (
           <img
             src={
@@ -338,15 +344,23 @@ function VideoInterview(props) {
             style={{ width: "80%", height: "80%", objectFit: "cover" }}
           />
         )}
-
-        <Components.Button onClick={startRecording}>
-          {buttonText}
-        </Components.Button>
+        {question.section !== "audio" && !isRecording && (
+          <Components.Button onClick={startRecording}>
+            {buttonText}
+          </Components.Button>
+        )}
+        {question.section === "audio" && (
+          <h4>
+            Press the mic button to start recording and save button to submit
+            the recording
+          </h4>
+        )}
         {isRecording && (
           <Components.Button onClick={submitRecording}>
             Stop Recording
           </Components.Button>
         )}
+
         {/* <Components.Message>{question.message}</Components.Message> */}
       </Components.ContainerWrapper>
     </>

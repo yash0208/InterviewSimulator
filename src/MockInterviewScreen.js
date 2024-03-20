@@ -59,6 +59,7 @@ function VideoInterview() {
   const [answer, setAnswer] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -94,8 +95,7 @@ function VideoInterview() {
     }
 
     if (question.section === "text") {
-      // Call function to upload text response to Firebase Firestore
-      uploadTextToFirebase(answer); // Add this line to upload the text response
+      uploadTextToFirebase(answer);
     }
   };
 
@@ -118,13 +118,13 @@ function VideoInterview() {
             ref(
               db,
               "completed-interviews/mockInterviews/" +
-                user.uid +
+                auth.currentUser.uid +
                 "/" +
                 questionIndex
             ),
             {
-              creator: user.uid,
-              candidate: user.uid,
+              creator: auth.currentUser.uid,
+              candidate: auth.currentUser.uid,
               questionId: questionIndex,
               section: questions[questionIndex].section,
               question: questions[questionIndex],
@@ -136,6 +136,7 @@ function VideoInterview() {
         } else {
           console.error("No result received");
         }
+        setLoading(false);
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
@@ -171,13 +172,13 @@ function VideoInterview() {
           ref(
             db,
             "completed-interviews/mockInterviews/" +
-              user.uid +
+              auth.currentUser.uid +
               "/" +
               questionIndex
           ),
           {
-            creator: user.uid,
-            candidate: user.uid,
+            creator: auth.currentUser.uid,
+            candidate: auth.currentUser.uid,
             questionId: questionIndex,
             section: questions[questionIndex].section,
             question: questions[questionIndex],
@@ -206,6 +207,7 @@ function VideoInterview() {
 
   const addAudioElement = (blob) => {
     // Upload audio to Firebase Storage
+    setLoading(true);
     uploadAudioToFirebase(blob);
   };
 
@@ -224,13 +226,13 @@ function VideoInterview() {
             ref(
               db,
               "completed-interviews/mockInterviews/" +
-                user.uid +
+                auth.currentUser.uid +
                 "/" +
                 questionIndex
             ),
             {
-              creator: user.uid,
-              candidate: user.uid,
+              creator: auth.currentUser.uid,
+              candidate: auth.currentUser.uid,
               questionId: questionIndex,
               section: questions[questionIndex].section,
               question: questions[questionIndex],
@@ -265,7 +267,7 @@ function VideoInterview() {
     buttonText = "Start Recording";
   } else if (question.section === "audio") {
     bannerText = "Audio Question";
-    buttonText = "Start Recording (1min)";
+    buttonText = "Start Recording";
   } else if (question.section === "text") {
     bannerText = "Text Question";
     buttonText = "Submit Answer";
@@ -289,19 +291,23 @@ function VideoInterview() {
           />
         )}
 
-        {question.section === "audio" && (
-          <div>
-            <AudioRecorder
-              onRecordingComplete={addAudioElement}
-              audioTrackConstraints={{
-                noiseSuppression: true,
-                echoCancellation: true,
-              }}
-              downloadOnSavePress={false}
-              downloadFileExtension="wav"
-            />
-          </div>
-        )}
+        {question.section === "audio" &&
+          (loading ? (
+            <BounceLoader color="#36d7b7" />
+          ) : (
+            <div>
+              <AudioRecorder
+                onRecordingComplete={addAudioElement}
+                audioTrackConstraints={{
+                  noiseSuppression: true,
+                  echoCancellation: true,
+                }}
+                downloadOnSavePress={false}
+                downloadFileExtension="wav"
+                showVisualizer={true}
+              />
+            </div>
+          ))}
 
         {question.section === "video" && (
           <img
@@ -315,16 +321,25 @@ function VideoInterview() {
           />
         )}
 
-        {/* {!isRecording && <BounceLoader color="#36d7b7" />} */}
+        {question.section !== "audio" && !isRecording && (
+          <Components.Button onClick={startRecording}>
+            {buttonText}
+          </Components.Button>
+        )}
 
-        <Components.Button onClick={startRecording}>
-          {buttonText}
-        </Components.Button>
+        {question.section === "audio" && (
+          <h4>
+            Press the mic button to start recording and save button to submit
+            the recording
+          </h4>
+        )}
+
         {isRecording && (
           <Components.Button onClick={submitRecording}>
             Stop Recording
           </Components.Button>
         )}
+
         {/* <Components.Message>{question.message}</Components.Message> */}
       </Components.ContainerWrapper>
     </>
