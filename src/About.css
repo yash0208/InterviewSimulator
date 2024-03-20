@@ -103,5 +103,17 @@
     width: 45.5%; /* Make the image fill its container */
     height: 400px; /* Make the image fill its container */
     object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+    color: #000000; /* White text color */
+    font-family: "Montserrat", sans-serif; /* Montserrat font */
+    font-size: 18px;
+    text-align: start;
+}
+
+.slick-prev:before {
+color: black !important;
+}
+
+.slick-next:before {
+color: black !important;
 }
   
