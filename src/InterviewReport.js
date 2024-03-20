@@ -145,16 +145,16 @@ const Report = () => {
 
 
 
-    return (!loading && <div className="report-container">
+    return (!loading && <div className="report-container" style={{backgroundColor: '#f1f3f7'}}>
             <h1>Report Page</h1><br /><br />
 
-            <div className="report-section">
+            <div className="report-section" style={{padding:'20px', backgroundColor:'#FFFFFF', borderRadius:'20px', margin:'20px' }}>
                 <h2>Text Analysis</h2>
                 {/* Insert the rotated bar charts here */}
-                <div className="graph-container">
-                    <div className="bar-graph rotated">
+                <div className="graph-container" >
+                    <div className="bar-graph rotated" style={{weight: '900px'}}>
                         <BarChart
-                            xAxis={[
+                            yAxis={[
                                 {
                                     id: 'barCategories',
                                     data: ['Openness', 'Conscientiousness', 'Extroversion', 'Agreeableness', 'Neuroticism'],
@@ -162,15 +162,16 @@ const Report = () => {
                                 },
                             ]}
                             series={[
-                                {
-                                    data: [2, 5, 3, 7, 1],
-                                },
+                                // {
+                                //     data: [2, 5, 3, 7, 1],
+                                // },
                                 {
                                     data: [op*100, co*100, ex*100, ag*100, nr*100],
                                 }
                             ]}
-                            width={1300}
-                            height={700}
+                            width={800}
+                            height={500}
+                            layout="horizontal"
                             sx={{
                                 "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel":{
                                     fontFamily: "'Montserrat', sans-serif",
@@ -182,11 +183,7 @@ const Report = () => {
                 <div className="legend">
                     <div className="legend-item">
                         <div className="legend-color" style={{ backgroundColor: '#28acac' }}></div>
-                        <div className="legend-label">Your Personality</div>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#4094f4' }}></div>
-                        <div className="legend-label">General Average</div>
+                        <div className="legend-label">Your Personality Analysis</div>
                     </div>
                 </div>
             </div>
