@@ -335,7 +335,7 @@ export default function InterviewerScreen() {
                   View Details
                 </Button>
                 <Button
-                  style={{ marginLeft: "20px" }}
+                  style={{ marginLeft: "5px" }}
                   variant="success"
                   onClick={() =>
                     handleCardClick2(
