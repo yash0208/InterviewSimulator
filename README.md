@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# IntuitiHire Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+IntuitiHire is a comprehensive mock interview platform that simulates the interview experience for both candidates and interviewers. The application is built using a microservices architecture, ensuring scalability and ease of maintenance.
 
-In the project directory, you can run:
+### Machine Learning Integration
 
-### `npm start`
+IntuitiHire leverages cutting-edge machine learning models from Hugging Face to analyze text, audio, and video inputs. These models are integral to the report generation feature, providing in-depth insights into candidate performance:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Text Analysis:** Utilizes transformer models for sentiment analysis and keyword extraction.
+- **Audio Analysis:** Employs speech-to-text conversion models followed by language processing to evaluate communication skills.
+- **Video Analysis:** Leverages facial recognition and emotion detection models to assess candidate engagement and reaction.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+- **Frontend:** React.js, HTML5, CSS3, JavaScript
+- **Backend:** Flask
+- **Database:** Firebase
+- **Video/Audio Processing:** open-cv, pyaudio
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## System Requirements
 
-### `npm run build`
+- **OS:** Cross-platform compatibility (Windows, MacOS, Linux)
+- **Browser:** Latest versions of Chrome, Firefox, Safari, or Edge
+- **Node.js:** Version 14 or newer
+- **Python:** Version 3 or newer
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Frontend Repository Link
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [Frontend Repository](https://github.com/yash0208/InterviewSimulator)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Backend Repository Link
 
-### `npm run eject`
+- [Backend Repository](https://github.com/Nisarg-18/interview-simulator-backend)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Frontend Installation Guide
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Environment Setup:**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   - Ensure Node.js is installed on your system.
+   - Clone the repository from the source control to your local machine.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Database Setup:**
 
-## Learn More
+   - Open a Firebase project and add the credentials in the `.env` file as follows:
+     ```
+     REACT_APP_FIREBASE_API_KEY=your_api_key_here
+     REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
+     REACT_APP_FIREBASE_PROJECT_ID=your_project_id_here
+     REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
+     REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id_here
+     REACT_APP_FIREBASE_APP_ID=your_app_id_here
+     REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id_here
+     ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. **Application Setup:**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   - Navigate to the cloned directory and install dependencies using `npm install`.
 
-### Code Splitting
+4. **Starting the Application:**
+   - Launch the frontend application using `npm start`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Backend Installation Guide
 
-### Analyzing the Bundle Size
+1. **Environment Setup:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   - Ensure Python is installed on your system.
+   - Clone the repository from the source control to your local machine.
 
-### Making a Progressive Web App
+2. **Application Setup:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   - Navigate to the cloned directory and install dependencies present in `requirements.txt`.
+   - Download the models required for this project from [here](https://drive.google.com/drive/folders/1aK1Ni6YKSoptxHCvfv1EwKMlF6deFizM?usp=sharing).
 
-### Advanced Configuration
+3. **Database Setup:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   - Open a Firebase project and add the `key.json` file in the project directory.
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+4. **Starting the Application:**
+   - Run the backend server using `python main.py`.
