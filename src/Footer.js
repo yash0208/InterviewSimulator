@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/help");
+  };
   return (
     <div style={{ width: "100%" }}>
       <footer
@@ -51,7 +56,8 @@ const Footer = () => {
                   }}
                 />
                 <p>
-                 Revolutionizing virtual job interviews with cutting-edge AI for fairer, more insightful hiring decisions
+                  Revolutionizing virtual job interviews with cutting-edge AI
+                  for fairer, more insightful hiring decisions
                 </p>
               </div>
 
@@ -66,22 +72,34 @@ const Footer = () => {
                   }}
                 />
                 <p>
-                  <a href="https://www.linkedin.com/company/IntuitiHire/" className="text-dark">
+                  <a
+                    href="https://www.linkedin.com/company/IntuitiHire/"
+                    className="text-dark"
+                  >
                     LinkedIn
                   </a>
                 </p>
                 <p>
-                  <a href="https://twitter.com/i/flow/login?redirect_after_login=%2FIntuitiHire" className="text-dark">
+                  <a
+                    href="https://twitter.com/i/flow/login?redirect_after_login=%2FIntuitiHire"
+                    className="text-dark"
+                  >
                     Twitter
                   </a>
                 </p>
                 <p>
-                  <a href="https://www.instagram.com/IntuitiHire/" className="text-dark">
+                  <a
+                    href="https://www.instagram.com/IntuitiHire/"
+                    className="text-dark"
+                  >
                     Instagram
                   </a>
                 </p>
                 <p>
-                  <a href="https://www.facebook.com/IntuitiHire" className="text-dark">
+                  <a
+                    href="https://www.facebook.com/IntuitiHire"
+                    className="text-dark"
+                  >
                     Facebook
                   </a>
                 </p>
@@ -99,12 +117,12 @@ const Footer = () => {
                 />
                 <p>
                   <a href="#!" className="text-dark">
-                  Terms and Conditions
+                    Terms and Conditions
                   </a>
                 </p>
                 <p>
                   <a href="#!" className="text-dark">
-                  Privacy Policy
+                    Privacy Policy
                   </a>
                 </p>
                 {/* <p>
@@ -113,7 +131,7 @@ const Footer = () => {
                   </a>
                 </p> */}
                 <p>
-                  <a href="#!" className="text-dark">
+                  <a href="" className="text-dark" onClick={handleClick}>
                     Help
                   </a>
                 </p>
@@ -133,7 +151,8 @@ const Footer = () => {
                   <i className="fas fa-home mr-3"></i> Canada, CA H3H2P1
                 </p>
                 <p>
-                  <i className="fas fa-envelope mr-3"></i> contact@intuitihire.com
+                  <i className="fas fa-envelope mr-3"></i>{" "}
+                  contact@intuitihire.com
                 </p>
                 <p>
                   <i className="fas fa-phone mr-3"></i> + 01 438 725 1807
@@ -151,7 +170,6 @@ const Footer = () => {
           style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
         >
           © 2023 Intutihire.All Rights Reserved.
-          
         </div>
       </footer>
     </div>

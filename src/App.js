@@ -18,6 +18,7 @@ import ThankYou from "./ThankYou";
 import InterviewScreen from "./InterviewScreen";
 import MockInterviewReport from "./MockInterviewReport";
 import InterviewReport from "./InterviewReport";
+import Help from "./Help";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
           />
           <Route path="/candidate/text-interview" element={<TextInterview />} />
           <Route path="/candidate/text-interview/text" element={<Text />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </BrowserRouter>
     </>
