@@ -534,7 +534,7 @@ function VideoInterview() {
               <img
                 src={apiLink}
                 alt=""
-                style={{ width: "50%", height: "50%", objectFit: "cover" }}
+                style={{ width: "40%", height: "40%", objectFit: "cover" }}
               />
             </>
           ))}
