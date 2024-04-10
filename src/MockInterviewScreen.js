@@ -14,9 +14,10 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { AudioRecorder } from "react-audio-voice-recorder";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import { ref as sRef } from "firebase/storage";
 import BounceLoader from "react-spinners/BounceLoader.js";
+import Timer from "./Timer.js";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -62,7 +63,12 @@ function VideoInterview() {
   const [isRecording, setIsRecording] = useState(false);
   const [apiLink, setApiLink] = useState("http://127.0.0.1:8080/video_feed");
   const [loading, setLoading] = useState(false);
-
+  const [preview, setPreview] = useState(false);
+  const [previewLink, setPreviewLink] = useState("");
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [videoResponse, setVideoResponse] = useState(null);
+  const [numberOfAttempts, setNumberOfAttempts] = useState(0);
+  const recorderControls = useAudioRecorder();
   const navigate = useNavigate();
   const goBack = () => navigate("/auth/candidate");
 
@@ -84,76 +90,124 @@ function VideoInterview() {
           });
         });
         setQuestions(interviewsData);
-        setQuestion(interviewsData[0]); // Set the initial question after fetching data
+        setQuestion(interviewsData[0]);
+
+        if (interviewsData[0].section == "text") {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          const newTimeoutId = setTimeout(
+            uploadTextToFirebase,
+            parseInt(interviewsData[0].timeLimit) * 60 * 1000
+          );
+          setTimeoutId(newTimeoutId);
+        }
       }
     };
 
     fetchData();
   }, []);
 
+  const addAudioElement = (blob) => {
+    // Upload audio to Firebase Storage
+    setLoading(true);
+    uploadAudioToFirebase(blob);
+  };
+
+  // Function to cancel the timeout
+  const cancelTimeout = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null); // Clear the timeout ID from state
+    }
+  };
+
   const startRecording = () => {
     if (question.section === "video") {
       setIsRecording(true);
+      setPreviewLink("");
+      setPreview(false);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      const newTimeoutId = setTimeout(() => {
+        submitRecording();
+      }, parseInt(question.timeLimit) * 60 * 1000);
+      setTimeoutId(newTimeoutId);
     } else if (question.section === "audio") {
     }
 
     if (question.section === "text") {
-      uploadTextToFirebase(answer);
+      uploadTextToFirebase();
     }
   };
 
-  const uploadAudioToFirebase = async (blob) => {
-    const storageRef = sRef(storage, `audio/${Date.now()}.wav`);
-    const uploadTask = await uploadBytesResumable(storageRef, blob);
-
-    // Get download URL
-    const downloadURL = await getDownloadURL(storageRef);
-
-    axios
-      .post("http://127.0.0.1:8080/audio_analysis", { link: downloadURL })
-      .then((response) => {
-        // Check if response data contains emotion
-        if (response.data) {
-          console.log("Predicted emotion:", response.data);
-          const user = auth.currentUser;
-          const db = getDatabase();
-          set(
-            ref(
-              db,
-              "completed-interviews/mockInterviews/" +
-                auth.currentUser.uid +
-                "/" +
-                questionIndex
-            ),
-            {
-              creator: auth.currentUser.uid,
-              candidate: auth.currentUser.uid,
-              questionId: questionIndex,
-              section: questions[questionIndex].section,
-              question: questions[questionIndex],
-              questionContent: questions[questionIndex].question,
-              response: response.data,
-              link: downloadURL,
-            }
-          );
-        } else {
-          console.error("No result received");
+  const uploadTextToFirebase = async () => {
+    try {
+      // Make a POST request for text analysis
+      const response = await axios.post(
+        "http://127.0.0.1:8080/personality_detection",
+        {
+          text: document.getElementById("textbox_id").value,
         }
-        setLoading(false);
-        setQuestionIndex((prevIndex) => prevIndex + 1);
-        if (questionIndex < questions.length - 1) {
-          setQuestion(questions[questionIndex + 1]);
-        } else {
-          goBack();
-          alert("All questions answered. Submitting recording...");
-        }
-      })
-      .catch((error) => {
-        console.error("Error stopping recording:", error);
-      });
+      );
+
+      console.log("Text analysis response:", response.data);
+
+      // Check if response data contains emotion
+      if (response.data) {
+        console.log("Text analysis response:", response.data);
+        setNumberOfAttempts(numberOfAttempts + 1);
+        setPreview(true);
+        setPreviewLink(response.data.text);
+
+        // Upload text response and analysis to Firebase Firestore
+        const db = getDatabase();
+        set(
+          ref(
+            db,
+            "completed-interviews/mockInterviews/" +
+              auth.currentUser.uid +
+              "/" +
+              questionIndex
+          ),
+          {
+            creator: auth.currentUser.uid,
+            candidate: auth.currentUser.uid,
+            questionId: questionIndex,
+            section: questions[questionIndex].section,
+            question: questions[questionIndex],
+            questionContent: questions[questionIndex].question,
+            response: {
+              text: document.getElementById("textbox_id").value,
+              analysis: response.data,
+            },
+            numberOfAttempts: numberOfAttempts,
+          }
+        );
+        setAnswer("");
+      } else {
+        console.error("No result received from text analysis");
+      }
+    } catch (error) {
+      console.error("Error during text analysis:", error);
+    }
   };
 
-  const uploadTextToFirebase = async (textResponse) => {
+  const reSubmitText = (question) => {
+    setPreview(false);
+    setPreviewLink("");
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    const newTimeoutId = setTimeout(
+      uploadTextToFirebase,
+      parseInt(question.timeLimit) * 60 * 1000
+    );
+    setTimeoutId(newTimeoutId);
+  };
+
+  const uploadTextToFirebaseFinal = async (textResponse) => {
     try {
       // Make a POST request for text analysis
       const response = await axios.post(
@@ -163,14 +217,13 @@ function VideoInterview() {
         }
       );
 
-      console.log("Text analysis response:", response.data);
-
       // Check if response data contains emotion
       if (response.data) {
         console.log("Text analysis response:", response.data);
-
-        // Upload text response and analysis to Firebase Firestore
-        const user = auth.currentUser;
+        setPreview(false);
+        setPreviewLink("");
+        cancelTimeout();
+        setNumberOfAttempts(numberOfAttempts + 1);
         const db = getDatabase();
         set(
           ref(
@@ -191,14 +244,25 @@ function VideoInterview() {
               text: textResponse,
               analysis: response.data,
             },
+            numberOfAttempts: numberOfAttempts,
           }
         );
-
+        setNumberOfAttempts(0);
         setAnswer("");
         // Proceed to the next question or perform other actions
         setQuestionIndex((prevIndex) => prevIndex + 1);
         if (questionIndex < questions.length - 1) {
           setQuestion(questions[questionIndex + 1]);
+          if (question.section == "text") {
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+            }
+            const newTimeoutId = setTimeout(
+              uploadTextToFirebase,
+              parseInt(question.timeLimit) * 60 * 1000
+            );
+            setTimeoutId(newTimeoutId);
+          }
         } else {
           goBack();
           alert("All questions answered. Submitting recording...");
@@ -211,22 +275,18 @@ function VideoInterview() {
     }
   };
 
-  const addAudioElement = (blob) => {
-    // Upload audio to Firebase Storage
-    setLoading(true);
-    uploadAudioToFirebase(blob);
-  };
-
   const submitRecording = () => {
     setIsRecording(false);
-
     axios
       .get("http://127.0.0.1:8080/close_camera")
       .then((response) => {
         // Check if response data contains emotion
         if (response.data) {
           console.log("Predicted emotion:", response.data);
-          const user = auth.currentUser;
+          setNumberOfAttempts(numberOfAttempts + 1);
+          setPreviewLink(response.data.video_link);
+          setVideoResponse(response.data);
+          setPreview(true);
           const db = getDatabase();
           set(
             ref(
@@ -244,6 +304,7 @@ function VideoInterview() {
               question: questions[questionIndex],
               questionContent: questions[questionIndex].question,
               response: response.data,
+              numberOfAttempts: numberOfAttempts,
             }
           );
         } else {
@@ -253,14 +314,117 @@ function VideoInterview() {
       .catch((error) => {
         console.error("Error stopping recording:", error);
       });
+  };
+
+  const submitRecordingFinal = () => {
+    setIsRecording(false);
+    setPreviewLink("");
+    setPreview(false);
+    cancelTimeout();
+    const db = getDatabase();
+    setNumberOfAttempts(numberOfAttempts + 1);
+    set(
+      ref(
+        db,
+        "completed-interviews/mockInterviews/" +
+          auth.currentUser.uid +
+          "/" +
+          questionIndex
+      ),
+      {
+        creator: auth.currentUser.uid,
+        candidate: auth.currentUser.uid,
+        questionId: questionIndex,
+        section: questions[questionIndex].section,
+        question: questions[questionIndex],
+        questionContent: questions[questionIndex].question,
+        response: videoResponse,
+        numberOfAttempts: numberOfAttempts,
+      }
+    );
+    setVideoResponse(null);
+    setNumberOfAttempts(0);
 
     setQuestionIndex((prevIndex) => prevIndex + 1);
     if (questionIndex < questions.length - 1) {
       setQuestion(questions[questionIndex + 1]);
+      if (question.section == "text") {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        const newTimeoutId = setTimeout(
+          uploadTextToFirebase,
+          parseInt(question.timeLimit) * 60 * 1000
+        );
+        setTimeoutId(newTimeoutId);
+      }
     } else {
       goBack();
       alert("All questions answered. Submitting recording...");
     }
+  };
+
+  const uploadAudioToFirebase = async (blob) => {
+    const storageRef = sRef(storage, `audio/${Date.now()}.wav`);
+    const uploadTask = await uploadBytesResumable(storageRef, blob);
+
+    // Get download URL
+    const downloadURL = await getDownloadURL(storageRef);
+
+    axios
+      .post("http://127.0.0.1:8080/audio_analysis", { link: downloadURL })
+      .then((response) => {
+        // Check if response data contains emotion
+        if (response.data) {
+          console.log("Predicted emotion:", response.data);
+          setLoading(false);
+          setNumberOfAttempts(numberOfAttempts + 1);
+          const db = getDatabase();
+          set(
+            ref(
+              db,
+              "completed-interviews/mockInterviews/" +
+                auth.currentUser.uid +
+                "/" +
+                questionIndex
+            ),
+            {
+              creator: auth.currentUser.uid,
+              candidate: auth.currentUser.uid,
+              questionId: questionIndex,
+              section: questions[questionIndex].section,
+              question: questions[questionIndex],
+              questionContent: questions[questionIndex].question,
+              response: response.data,
+              link: downloadURL,
+              numberOfAttempts: numberOfAttempts,
+            }
+          );
+          setNumberOfAttempts(0);
+          setQuestionIndex((prevIndex) => prevIndex + 1);
+          if (questionIndex < questions.length - 1) {
+            setQuestion(questions[questionIndex + 1]);
+            if (question.section == "text") {
+              if (timeoutId) {
+                clearTimeout(timeoutId);
+              }
+              const newTimeoutId = setTimeout(
+                uploadTextToFirebase,
+                parseInt(question.timeLimit) * 60 * 1000
+              );
+              setTimeoutId(newTimeoutId);
+            }
+          } else {
+            goBack();
+            alert("All questions answered. Submitting recording...");
+          }
+        } else {
+          console.error("No result received");
+        }
+      })
+      .catch((error) => {
+        console.error("Error stopping recording:", error);
+      });
   };
 
   if (!question) {
@@ -280,6 +444,11 @@ function VideoInterview() {
     buttonText = "Submit Answer";
   }
 
+  const handleInputChange = (e) => {
+    const a = e.target;
+    setAnswer(a.value);
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -287,16 +456,50 @@ function VideoInterview() {
         <Components.Banner>{bannerText}</Components.Banner>
         <Components.BlockQuote>
           <Components.Paragraph class="quotation">
-            {question.question}
+            {question.section === "audio"
+              ? question.question
+              : `${question.question} (Multiple attempts allowed)`}
           </Components.Paragraph>
         </Components.BlockQuote>
-        {question.section === "text" && (
-          <StyledTextInput
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Type your answer here..."
-          />
+
+        {question.section === "text" && !preview && (
+          <>
+            <Timer initialMinutes={parseInt(question.timeLimit)}></Timer>
+            <StyledTextInput
+              id="textbox_id"
+              value={answer}
+              onChange={handleInputChange}
+              placeholder="Type your answer here..."
+            />
+          </>
         )}
+
+        {question.section === "text" &&
+          (!preview ? (
+            <></>
+          ) : (
+            <>
+              <StyledTextInput
+                value={previewLink}
+                // onChange={(e) => setAnswer(e.target.value)}
+                placeholder="Type your answer here..."
+              />
+              <Components.Button
+                onClick={() => {
+                  reSubmitText(question);
+                }}
+              >
+                Re-attempt
+              </Components.Button>
+              <Components.Button
+                onClick={() => {
+                  uploadTextToFirebaseFinal(previewLink);
+                }}
+              >
+                Submit
+              </Components.Button>
+            </>
+          ))}
 
         {question.section === "audio" &&
           (loading ? (
@@ -317,21 +520,26 @@ function VideoInterview() {
           ))}
 
         {question.section === "video" &&
-          (!isRecording ? (
+          (!preview && !isRecording ? (
             <img
               src={loader}
               alt=""
               style={{ width: "20%", height: "20%", objectFit: "cover" }}
             />
+          ) : preview ? (
+            <></>
           ) : (
-            <img
-              src={apiLink}
-              alt=""
-              style={{ width: "50%", height: "50%", objectFit: "cover" }}
-            />
+            <>
+              <Timer initialMinutes={parseInt(question.timeLimit)}></Timer>
+              <img
+                src={apiLink}
+                alt=""
+                style={{ width: "50%", height: "50%", objectFit: "cover" }}
+              />
+            </>
           ))}
 
-        {question.section !== "audio" && !isRecording && (
+        {question.section !== "audio" && !preview && !isRecording && (
           <Components.Button onClick={startRecording}>
             {buttonText}
           </Components.Button>
@@ -344,12 +552,29 @@ function VideoInterview() {
           </h4>
         )}
 
-        {isRecording && (
+        {question.section == "video" && isRecording && (
           <Components.Button onClick={submitRecording}>
             Stop Recording
           </Components.Button>
         )}
 
+        {question.section === "video" &&
+          (!preview ? (
+            <></>
+          ) : (
+            <>
+              <video controls style={{ width: "500px", height: "300px" }}>
+                <source src={previewLink} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <Components.Button onClick={startRecording}>
+                Re-attempt
+              </Components.Button>
+              <Components.Button onClick={submitRecordingFinal}>
+                Submit
+              </Components.Button>
+            </>
+          ))}
         {/* <Components.Message>{question.message}</Components.Message> */}
       </Components.ContainerWrapper>
     </>

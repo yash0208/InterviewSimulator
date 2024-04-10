@@ -18,7 +18,8 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { AudioRecorder } from "react-audio-voice-recorder";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
+
 import { ref as sRef } from "firebase/storage";
 
 const firebaseConfig = {
@@ -139,7 +140,23 @@ const Report = () => {
         setLe((le + video[i].response.total_time_looking_left) / (i + 1));
         setRi((ri + video[i].response.total_time_looking_right) / (i + 1));
       }
-      if (op > 0 || co > 0 || ex > 0 || ag > 0 || nr > 0) {
+      if (
+        op > 0 ||
+        co > 0 ||
+        ex > 0 ||
+        ag > 0 ||
+        nr > 0 ||
+        hp > 0 ||
+        an > 0 ||
+        di > 0 ||
+        fr > 0 ||
+        nu > 0 ||
+        sa > 0 ||
+        su > 0 ||
+        ce > 0 ||
+        le > 0 ||
+        ri > 0
+      ) {
         setLoading(false);
       }
     }
